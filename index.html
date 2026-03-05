@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>JAN SEVA — जन सेवा — జన సేవ</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:Georgia,serif;background:#FEFAE0;min-height:100vh;}
+  button,input,select,textarea{font-family:Georgia,serif;}
+  button{cursor:pointer;}
+  input,select,textarea{outline:none;width:100%;}
+
+  /* Language Selector */
+  #lang-bar{background:#1B2A4A;padding:6px 16px;display:flex;align-items:center;justify-content:flex-end;gap:8px;}
+  #lang-bar span{color:rgba(255,255,255,0.6);font-size:11px;font-weight:700;letter-spacing:1px;}
+  .lang-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+  .lang-btn.active{background:linear-gradient(135deg,#FF6B35,#F4A261);color:#fff;border-color:transparent;}
+
+  /* Header */
+  #header{background:linear-gradient(135deg,#1B2A4A,#2E4270);position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.3);}
+  #header-top{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:12px;height:56px;padding:0 16px;}
+  #header-logo{font-size:20px;}
+  #header-title{flex:1;}
+  #header-title .name{font-weight:900;color:#fff;font-size:15px;}
+  #header-title .loc{color:rgba(255,255,255,0.5);font-size:10px;}
+  #header-user{display:flex;align-items:center;gap:8px;}
+  #header-user .uname{color:#fff;font-size:12px;font-weight:700;text-align:right;}
+  #header-user .uward{color:rgba(255,255,255,0.5);font-size:10px;text-align:right;}
+  #avatar{width:34px;height:34px;border-radius:50%;background:#2E4270;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;}
+  #logout-btn{background:rgba(255,255,255,0.2);border:none;color:#fff;padding:6px 10px;border-radius:8px;font-size:11px;font-weight:700;}
+  #tabs{max-width:1100px;margin:0 auto;display:flex;gap:2px;padding:0 8px;overflow-x:auto;}
+  .tab-btn{background:transparent;border:none;color:rgba(255,255,255,0.6);padding:10px 14px;font-weight:700;font-size:12px;border-radius:10px 10px 0 0;white-space:nowrap;}
+  .tab-btn.active{background:linear-gradient(135deg,#FF6B35,#F4A261);color:#fff;}
+
+  #toast{position:fixed;top:16px;right:16px;padding:12px 18px;border-radius:12px;font-weight:700;font-size:13px;z-index:3000;display:none;box-shadow:0 8px 24px rgba(0,0,0,0.2);max-width:280px;}
+
+  .page{display:none;max-width:1100px;margin:0 auto;padding:20px 14px;}
+  .page.active{display:block;}
+
+  /* Login */
+  #login-page{min-height:100vh;background:linear-gradient(160deg,#1B2A4A 0%,#2E4270 50%,#2D6A4F 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;}
+  #login-lang-bar{display:flex;gap:8px;margin-bottom:20px;align-items:center;}
+  #login-lang-bar span{color:rgba(255,255,255,0.5);font-size:12px;font-weight:700;margin-right:4px;}
+  #login-box{width:100%;max-width:420px;}
+  #login-logo{text-align:center;margin-bottom:28px;}
+  #login-logo .emoji{font-size:52px;}
+  #login-logo .title{font-size:28px;font-weight:900;color:#fff;letter-spacing:-1px;}
+  #login-logo .sub{font-size:13px;color:rgba(255,255,255,0.6);letter-spacing:2px;}
+  #login-logo .line{height:2px;background:linear-gradient(90deg,transparent,#F4A261,transparent);margin:14px auto;width:180px;}
+  #login-logo .subsub{font-size:11px;color:rgba(255,255,255,0.4);}
+  #login-card{background:rgba(255,255,255,0.12);border-radius:20px;padding:22px;border:1px solid rgba(255,255,255,0.15);}
+  #login-card .heading{font-size:12px;font-weight:700;color:rgba(255,255,255,0.6);margin-bottom:14px;text-align:center;letter-spacing:1px;}
+  .role-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:14px;width:100%;color:#fff;margin-bottom:10px;transition:background 0.2s;text-align:left;}
+  .role-btn:hover,.role-btn:active{background:rgba(255,255,255,0.2);}
+  .role-btn .icon{font-size:26px;}
+  .role-btn .rlabel{font-weight:800;font-size:14px;}
+  .role-btn .rsub{font-size:11px;color:rgba(255,255,255,0.6);}
+  #login-footer{text-align:center;margin-top:14px;color:rgba(255,255,255,0.3);font-size:11px;}
+
+  .welcome-banner{background:linear-gradient(135deg,#2D6A4F,#2E4270);border-radius:18px;padding:24px 22px;margin-bottom:20px;color:#fff;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .welcome-banner h2{font-size:20px;font-weight:900;}
+  .welcome-banner p{color:rgba(255,255,255,0.8);font-size:13px;margin-top:4px;}
+  .report-fab-btn{background:linear-gradient(135deg,#FF6B35,#F4A261);color:#fff;border:none;padding:12px 22px;border-radius:14px;font-weight:800;font-size:14px;}
+
+  .stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px;}
+  @media(min-width:600px){.stats-row{grid-template-columns:repeat(4,1fr);}}
+  .stat-card{background:#fff;border-radius:14px;padding:16px;border:1px solid #CBD5E1;display:flex;align-items:center;gap:12px;}
+  .stat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+  .stat-val{font-size:24px;font-weight:800;color:#1B2A4A;}
+  .stat-label{font-size:11px;color:#64748B;font-weight:600;}
+  .stat-sub{font-size:10px;font-weight:700;}
+
+  .section-title{font-weight:800;color:#1B2A4A;font-size:17px;margin-bottom:14px;}
+
+  .issue-card{background:#fff;border-radius:14px;border:1px solid #CBD5E1;overflow:hidden;margin-bottom:12px;}
+  .issue-header{padding:14px 16px;cursor:pointer;}
+  .issue-badges{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;}
+  .badge{padding:2px 10px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block;}
+  .issue-title{font-weight:700;color:#1B2A4A;font-size:14px;margin-bottom:4px;line-height:1.4;}
+  .issue-meta{font-size:11px;color:#64748B;}
+  .issue-votes{text-align:center;flex-shrink:0;}
+  .issue-votes .vnum{font-size:18px;font-weight:800;color:#FF6B35;}
+  .issue-votes .vlabel{font-size:9px;color:#64748B;}
+  .issue-body{padding:0 16px 14px;border-top:1px solid #F1F5F9;}
+  .issue-desc{color:#334155;font-size:13px;margin:10px 0;line-height:1.7;}
+  .issue-assigned{font-size:12px;color:#2D6A4F;font-weight:700;margin-bottom:10px;}
+  .updates-box{background:#F1F5F9;border-radius:10px;padding:12px;margin-bottom:10px;}
+  .updates-title{font-size:11px;font-weight:700;color:#334155;margin-bottom:8px;}
+  .update-author{font-size:12px;font-weight:700;color:#2E4270;}
+  .update-date{color:#64748B;font-weight:400;}
+  .update-text{font-size:13px;color:#334155;}
+  .status-btns{display:flex;gap:6px;flex-wrap:wrap;}
+  .status-btn{font-size:11px;padding:6px 12px;border:none;border-radius:8px;font-weight:600;}
+
+  .quick-btn{background:#fff;border:1px solid #CBD5E1;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin-bottom:10px;}
+  .quick-btn .qicon{font-size:20px;}
+  .quick-btn .qlabel{font-weight:700;color:#1B2A4A;font-size:13px;}
+
+  .next-meeting{background:linear-gradient(135deg,#D8F3DC,#FEFAE0);border-radius:14px;padding:14px;margin-top:14px;border:1px solid #52B788;}
+  .next-meeting .nm-label{font-weight:800;color:#2D6A4F;font-size:12px;margin-bottom:6px;}
+  .next-meeting .nm-title{font-weight:700;color:#1B2A4A;font-size:14px;}
+  .next-meeting .nm-sub{color:#64748B;font-size:12px;}
+
+  .dash-grid{display:grid;grid-template-columns:1fr;gap:20px;}
+  @media(min-width:700px){.dash-grid{grid-template-columns:2fr 1fr;}}
+
+  .filters-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;}
+  .filter-selects{display:flex;gap:8px;flex-wrap:wrap;}
+  .filter-select{padding:8px 12px;border-radius:10px;border:1px solid #CBD5E1;font-size:12px;background:#fff;}
+
+  .schemes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;}
+  .scheme-card{background:#fff;border-radius:14px;border:1px solid #CBD5E1;overflow:hidden;}
+  .scheme-header{background:linear-gradient(135deg,rgba(45,106,79,0.12),rgba(27,42,74,0.08));padding:14px 16px;border-bottom:1px solid #CBD5E1;}
+  .scheme-name{font-weight:800;color:#1B2A4A;font-size:14px;margin-bottom:6px;}
+  .scheme-body{padding:14px 16px;}
+  .scheme-row{display:flex;gap:8px;margin-bottom:6px;}
+  .scheme-key{font-size:12px;color:#64748B;min-width:64px;}
+  .scheme-val{font-size:13px;color:#1B2A4A;}
+  .apply-btn{margin-top:12px;width:100%;background:linear-gradient(135deg,#2D6A4F,#2E4270);color:#fff;border:none;padding:10px;border-radius:10px;font-weight:700;font-size:13px;}
+
+  .meeting-card{background:#fff;border-radius:14px;border:1px solid #CBD5E1;padding:18px 16px;margin-bottom:14px;}
+  .meeting-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:14px;}
+  .meeting-title{font-weight:800;color:#1B2A4A;font-size:16px;margin-bottom:6px;}
+  .meeting-meta{font-size:13px;color:#64748B;margin-bottom:2px;}
+  .meeting-attendees{font-size:13px;color:#2D6A4F;font-weight:700;}
+  .reg-btn{background:linear-gradient(135deg,#2D6A4F,#2E4270);color:#fff;border:none;padding:11px 20px;border-radius:12px;font-weight:700;font-size:13px;}
+  .agenda-box{background:#F1F5F9;border-radius:10px;padding:12px;}
+  .agenda-title{font-size:11px;font-weight:700;color:#334155;margin-bottom:8px;}
+  .agenda-item{font-size:13px;color:#1B2A4A;padding:4px 0;border-bottom:1px solid #CBD5E1;}
+  .agenda-item:last-child{border-bottom:none;}
+
+  #modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:900;display:none;align-items:center;justify-content:center;padding:16px;}
+  #modal-overlay.open{display:flex;}
+  #modal-box{background:#fff;border-radius:20px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;}
+  .modal-header{background:linear-gradient(135deg,#FF6B35,#F4A261);padding:18px 20px;border-radius:20px 20px 0 0;}
+  .modal-header h3{color:#fff;font-size:17px;font-weight:800;}
+  .modal-header p{color:rgba(255,255,255,0.85);font-size:13px;}
+  .modal-body{padding:20px;}
+  .form-group{margin-bottom:14px;}
+  .form-label{font-size:12px;font-weight:700;color:#334155;display:block;margin-bottom:6px;}
+  .form-input{padding:10px 14px;border-radius:10px;border:1px solid #CBD5E1;font-size:13px;}
+  .form-select{padding:10px 12px;border-radius:10px;border:1px solid #CBD5E1;font-size:12px;background:#fff;}
+  .form-textarea{padding:10px 14px;border-radius:10px;border:1px solid #CBD5E1;font-size:13px;resize:vertical;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .modal-footer{display:flex;gap:10px;margin-top:16px;}
+  .cancel-btn{flex:1;padding:12px;background:#F1F5F9;color:#334155;border:none;border-radius:12px;font-weight:700;font-size:14px;}
+  .submit-btn{flex:2;padding:12px;background:linear-gradient(135deg,#2D6A4F,#2E4270);color:#fff;border:none;border-radius:12px;font-weight:700;font-size:14px;}
+
+  #chat-fab{position:fixed;bottom:28px;right:20px;width:56px;height:56px;background:linear-gradient(135deg,#2D6A4F,#2E4270);border:none;border-radius:50%;font-size:24px;box-shadow:0 4px 20px rgba(45,106,79,0.6);z-index:500;display:none;align-items:center;justify-content:center;line-height:1;padding:0;text-align:center;}
+  #chat-box{position:fixed;bottom:84px;right:16px;width:calc(100% - 32px);max-width:340px;height:440px;background:#fff;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.25);display:none;flex-direction:column;z-index:1000;border:2px solid #52B788;overflow:hidden;}
+  #chat-box.open{display:flex;}
+  .chat-header{background:linear-gradient(135deg,#2D6A4F,#2E4270);padding:12px 16px;display:flex;align-items:center;gap:10px;}
+  .chat-bot-icon{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:16px;}
+  .chat-header-title{flex:1;color:#fff;font-weight:800;font-size:13px;}
+  .chat-header-sub{color:rgba(255,255,255,0.7);font-size:10px;}
+  .chat-close{background:none;border:none;color:#fff;font-size:22px;line-height:1;}
+  #chat-messages{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;}
+  .msg{max-width:85%;padding:10px 13px;border-radius:18px;font-size:13px;line-height:1.6;white-space:pre-wrap;}
+  .msg.ai{background:#F1F5F9;color:#1B2A4A;align-self:flex-start;border-radius:18px 18px 18px 4px;}
+  .msg.user{background:#1B2A4A;color:#fff;align-self:flex-end;border-radius:18px 18px 4px 18px;}
+  .chat-quick{padding:6px 12px;display:flex;gap:6px;flex-wrap:wrap;}
+  .chat-quick-btn{font-size:11px;padding:4px 10px;background:#D8F3DC;color:#2D6A4F;border:1px solid #52B788;border-radius:20px;font-weight:600;}
+  .chat-input-row{padding:10px 12px;border-top:1px solid #CBD5E1;display:flex;gap:8px;}
+  #chat-input{flex:1;padding:10px 12px;border-radius:12px;border:1px solid #CBD5E1;font-size:13px;}
+  #chat-send{background:#2D6A4F;color:#fff;border:none;border-radius:12px;padding:10px 14px;font-size:16px;}
+
+  /* GP Selector Panel */
+  #gp-selector-panel{background:linear-gradient(135deg,#1B4332,#2D6A4F);border-radius:18px;padding:20px;margin-bottom:20px;display:none;}
+  #gp-selector-panel h3{color:#fff;font-size:15px;font-weight:800;margin-bottom:4px;}
+  #gp-selector-panel p{color:rgba(255,255,255,0.7);font-size:12px;margin-bottom:14px;}
+  .gp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;}
+  .gp-card{background:rgba(255,255,255,0.12);border:2px solid rgba(255,255,255,0.2);border-radius:14px;padding:14px;cursor:pointer;transition:all 0.2s;text-align:left;}
+  .gp-card:hover{background:rgba(255,255,255,0.22);}
+  .gp-card.selected{background:rgba(255,255,255,0.25);border-color:#F4A261;}
+  .gp-card .gp-name{color:#fff;font-weight:800;font-size:13px;margin-bottom:2px;}
+  .gp-card .gp-villages{color:rgba(255,255,255,0.65);font-size:11px;}
+  .gp-card .gp-pop{color:rgba(255,255,255,0.5);font-size:10px;margin-top:3px;}
+  .gp-selected-bar{background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 14px;margin-top:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+  .gp-selected-bar span{color:#fff;font-size:13px;font-weight:700;}
+  .gp-change-btn{background:linear-gradient(135deg,#FF6B35,#F4A261);color:#fff;border:none;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;}
+
+  .issues-count{margin-bottom:10px;color:#64748B;font-size:13px;}
+  .report-btn-top{background:linear-gradient(135deg,#FF6B35,#F4A261);color:#fff;border:none;padding:10px 18px;border-radius:12px;font-weight:700;font-size:13px;}
+
+  /* Agriculture styles */
+  .agri-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+  .agri-tab{background:#fff;border:2px solid #CBD5E1;border-radius:12px;padding:10px 16px;font-weight:700;font-size:13px;color:#64748B;cursor:pointer;display:flex;align-items:center;gap:6px;}
+  .agri-tab.active{background:linear-gradient(135deg,#2D6A4F,#52B788);color:#fff;border-color:transparent;}
+  .agri-section{display:none;}
+  .agri-section.active{display:block;}
+  .agri-banner{background:linear-gradient(135deg,#1B4332,#2D6A4F);border-radius:18px;padding:22px;margin-bottom:20px;color:#fff;}
+  .agri-banner h2{font-size:19px;font-weight:900;margin-bottom:4px;}
+  .agri-banner p{color:rgba(255,255,255,0.8);font-size:13px;}
+  .agri-form-card{background:#fff;border-radius:16px;border:1px solid #CBD5E1;padding:20px;margin-bottom:16px;}
+  .agri-form-card h3{font-size:15px;font-weight:800;color:#1B2A4A;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+  .agri-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:16px;}
+  .agri-result{background:linear-gradient(135deg,#D8F3DC,#FEFAE0);border-radius:14px;padding:16px;border:1px solid #52B788;margin-top:14px;display:none;}
+  .agri-result.show{display:block;}
+  .agri-result h4{color:#1B4332;font-size:14px;font-weight:800;margin-bottom:10px;}
+  .agri-result p{color:#334155;font-size:13px;line-height:1.7;white-space:pre-wrap;}
+  .agri-btn{background:linear-gradient(135deg,#2D6A4F,#1B4332);color:#fff;border:none;padding:12px 24px;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;width:100%;margin-top:8px;}
+  .mandi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
+  .mandi-card{background:#fff;border-radius:14px;border:1px solid #CBD5E1;padding:14px;text-align:center;}
+  .mandi-crop{font-size:22px;margin-bottom:6px;}
+  .mandi-name{font-weight:800;color:#1B2A4A;font-size:13px;margin-bottom:4px;}
+  .mandi-price{font-size:20px;font-weight:900;color:#2D6A4F;}
+  .mandi-unit{font-size:10px;color:#64748B;}
+  .mandi-trend{font-size:11px;font-weight:700;margin-top:4px;}
+  .trend-up{color:#16a34a;}
+  .trend-down{color:#dc2626;}
+  .labour-card{background:#fff;border-radius:14px;border:1px solid #CBD5E1;padding:16px;margin-bottom:12px;}
+  .labour-card-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:10px;}
+  .labour-title{font-weight:800;color:#1B2A4A;font-size:14px;}
+  .labour-meta{font-size:12px;color:#64748B;margin-top:3px;}
+  .labour-badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;background:#D8F3DC;color:#166534;}
+  .labour-details{display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;}
+  .labour-detail{font-size:12px;color:#334155;}
+  .contact-btn{background:linear-gradient(135deg,#2D6A4F,#2E4270);color:#fff;border:none;padding:8px 16px;border-radius:10px;font-weight:700;font-size:12px;cursor:pointer;margin-top:10px;}
+  .scheme-farmer-badge{padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700;background:#FEF9C3;color:#713F12;margin-left:6px;}
+  .mgnrega-card{background:#fff;border-radius:14px;border:1px solid #CBD5E1;padding:16px;margin-bottom:12px;}
+  .mgnrega-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+  .mgnrega-title{font-weight:800;color:#1B2A4A;font-size:14px;}
+  .mgnrega-days{text-align:center;}
+  .mgnrega-days .dnum{font-size:24px;font-weight:900;color:#2D6A4F;}
+  .mgnrega-days .dlabel{font-size:10px;color:#64748B;}
+  .wage-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #F1F5F9;font-size:13px;}
+  .wage-row:last-child{border-bottom:none;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="login-page">
+  <div id="login-lang-bar">
+    <span>🌐</span>
+    <button class="lang-btn active" onclick="setLang('en')">English</button>
+    <button class="lang-btn" onclick="setLang('hi')">हिंदी</button>
+    <button class="lang-btn" onclick="setLang('te')">తెలుగు</button>
+  </div>
+  <div id="login-box">
+    <div id="login-logo">
+      <div class="emoji">🏛️</div>
+      <div class="title">JAN SEVA</div>
+      <div class="sub" id="login-tagline">जन सेवा • జన సేవ • LOCAL GOVERNANCE</div>
+      <div class="line"></div>
+      <div class="subsub" id="login-levels">Municipality • Gram Panchayat • Ward</div>
+    </div>
+    <div id="login-card">
+      <div class="heading" id="login-heading">SELECT YOUR ROLE TO CONTINUE</div>
+      <button class="role-btn" onclick="login('citizen')">
+        <span class="icon">👤</span>
+        <div><div class="rlabel" id="role-citizen">Citizen / नागरिक / పౌరుడు</div><div class="rsub" id="role-citizen-sub">Report issues, track complaints, apply for schemes</div></div>
+      </button>
+      <button class="role-btn" onclick="login('admin_ward')">
+        <span class="icon">🏠</span>
+        <div><div class="rlabel" id="role-ward">Ward Officer</div><div class="rsub" id="role-ward-sub">Manage Ward 7 issues and citizen requests</div></div>
+      </button>
+      <button class="role-btn" onclick="login('admin_gram')">
+        <span class="icon">🌿</span>
+        <div><div class="rlabel" id="role-gram">Gram Pradhan / గ్రామ ప్రధాన్</div><div class="rsub" id="role-gram-sub">Durganagar Gram Panchayat administration</div></div>
+      </button>
+      <button class="role-btn" onclick="login('admin_muni')">
+        <span class="icon">🏢</span>
+        <div><div class="rlabel" id="role-muni">Municipal Commissioner</div><div class="rsub" id="role-muni-sub">Full municipality oversight and analytics</div></div>
+      </button>
+    </div>
+    <div id="login-footer">Demo prototype • डेमो • డెమో • No real data stored</div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app" style="display:none;">
+  <!-- Language bar inside app -->
+  <div id="lang-bar">
+    <span id="lang-label">🌐 LANGUAGE:</span>
+    <button class="lang-btn active" id="lb-en" onclick="setLang('en')">English</button>
+    <button class="lang-btn" id="lb-hi" onclick="setLang('hi')">हिंदी</button>
+    <button class="lang-btn" id="lb-te" onclick="setLang('te')">తెలుగు</button>
+  </div>
+  <div id="header">
+    <div id="header-top">
+      <div id="header-logo">🏛️</div>
+      <div id="header-title">
+        <div class="name" id="app-title">JAN SEVA</div>
+        <div class="loc" id="hdr-loc"></div>
+      </div>
+      <div id="header-user">
+        <div>
+          <div class="uname" id="hdr-name"></div>
+          <div class="uward" id="hdr-ward"></div>
+        </div>
+        <div id="avatar"></div>
+        <button id="logout-btn" onclick="logout()">LOGOUT</button>
+      </div>
+    </div>
+    <div id="tabs">
+      <button class="tab-btn active" onclick="showTab('dashboard')" id="tab-dashboard">📊 Dashboard</button>
+      <button class="tab-btn" onclick="showTab('issues')"    id="tab-issues">📋 Issues</button>
+      <button class="tab-btn" onclick="showTab('schemes')"   id="tab-schemes">📜 Schemes</button>
+      <button class="tab-btn" onclick="showTab('meetings')"  id="tab-meetings">🤝 Meetings</button>
+      <button class="tab-btn" onclick="showTab('agri')"      id="tab-agri">🌾 Krishi</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+
+    <!-- GP SELECTOR — shown only for Gram Pradhan -->
+    <div id="gp-selector-panel">
+      <h3>🌿 Select Your Gram Panchayat</h3>
+      <p>Sirpur Kagaznagar Municipality — choose a GP to manage</p>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <select id="gp-dropdown" onchange="selectGP(this.value)" style="flex:1;padding:12px 16px;border-radius:12px;border:none;font-size:14px;font-weight:700;background:rgba(255,255,255,0.95);color:#1B2A4A;min-width:220px;">
+          <option value="">— Select Gram Panchayat —</option>
+          <option value="GP01">Nazrul Nagar GP</option>
+          <option value="GP02">Durga Nagar GP</option>
+          <option value="GP03">Kagaznagar GP</option>
+          <option value="GP04">Sirpur Village GP</option>
+          <option value="GP05">Asifabad GP</option>
+          <option value="GP06">Luxettipet GP</option>
+          <option value="GP07">Mandamarri GP</option>
+        </select>
+        <div id="gp-selected-label" style="color:#fff;font-size:13px;font-weight:700;display:none;">✅ <span id="gp-selected-text"></span></div>
+      </div>
+      <div id="gp-info-bar" style="display:none;background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 14px;margin-top:12px;">
+        <span style="color:#fff;font-size:12px;" id="gp-info-text"></span>
+      </div>
+    </div>
+
+    <!-- WARD SELECTOR — shown only for Ward Officer -->
+    <div id="ward-selector-panel" style="display:none;background:linear-gradient(135deg,#1B2A4A,#2E4270);border-radius:18px;padding:20px;margin-bottom:20px;">
+      <h3 style="color:#fff;font-size:15px;font-weight:800;margin-bottom:4px;">🏠 Select Your Ward</h3>
+      <p style="color:rgba(255,255,255,0.7);font-size:12px;margin-bottom:14px;">Sirpur Kagaznagar Municipality — choose a ward to manage</p>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <select id="ward-dropdown" onchange="selectWard(this.value)" style="flex:1;padding:12px 16px;border-radius:12px;border:none;font-size:14px;font-weight:700;background:rgba(255,255,255,0.95);color:#1B2A4A;min-width:220px;">
+          <option value="">— Select Ward —</option>
+          <option value="1">Ward No. 1</option>
+          <option value="2">Ward No. 2</option>
+          <option value="3">Ward No. 3</option>
+          <option value="4">Ward No. 4</option>
+          <option value="5">Ward No. 5</option>
+          <option value="6">Ward No. 6</option>
+          <option value="7">Ward No. 7</option>
+          <option value="8">Ward No. 8</option>
+          <option value="9">Ward No. 9</option>
+          <option value="10">Ward No. 10</option>
+          <option value="11">Ward No. 11</option>
+          <option value="12">Ward No. 12</option>
+          <option value="13">Ward No. 13</option>
+          <option value="14">Ward No. 14</option>
+          <option value="15">Ward No. 15</option>
+          <option value="16">Ward No. 16</option>
+          <option value="17">Ward No. 17</option>
+          <option value="18">Ward No. 18</option>
+          <option value="19">Ward No. 19</option>
+          <option value="20">Ward No. 20</option>
+          <option value="21">Ward No. 21</option>
+          <option value="22">Ward No. 22</option>
+          <option value="23">Ward No. 23</option>
+          <option value="24">Ward No. 24</option>
+          <option value="25">Ward No. 25</option>
+        </select>
+      </div>
+      <div id="ward-info-bar" style="display:none;background:rgba(255,255,255,0.15);border-radius:10px;padding:10px 14px;margin-top:12px;">
+        <span style="color:#fff;font-size:12px;" id="ward-info-text"></span>
+      </div>
+    </div>
+      <div>
+        <h2 id="welcome-name">Namaste! 🙏</h2>
+        <p id="welcome-sub"></p>
+      </div>
+      <button class="report-fab-btn" id="banner-report-btn" onclick="openModal()">+ Report Issue</button>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(27,42,74,0.1)">📋</div><div><div class="stat-val" id="s-total">0</div><div class="stat-label" id="s-total-label">Total Issues</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(229,62,62,0.1)">🔴</div><div><div class="stat-val" id="s-open">0</div><div class="stat-label" id="s-open-label">Open</div><div class="stat-sub" style="color:#E53E3E" id="s-open-sub">Needs attention</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(49,130,206,0.1)">🔵</div><div><div class="stat-val" id="s-prog">0</div><div class="stat-label" id="s-prog-label">In Progress</div><div class="stat-sub" style="color:#3182CE" id="s-prog-sub">Being worked on</div></div></div>
+      <div class="stat-card"><div class="stat-icon" style="background:rgba(45,106,79,0.1)">✅</div><div><div class="stat-val" id="s-res">0</div><div class="stat-label" id="s-res-label">Resolved</div><div class="stat-sub" style="color:#2D6A4F" id="s-res-sub">Completed</div></div></div>
+    </div>
+    <div class="dash-grid">
+      <div>
+        <div class="section-title" id="recent-title">Recent Issues</div>
+        <div id="recent-issues"></div>
+      </div>
+      <div>
+        <div class="section-title" id="quick-title">Quick Actions</div>
+        <div id="quick-actions"></div>
+        <div class="next-meeting">
+          <div class="nm-label" id="next-mtg-label">📅 NEXT MEETING</div>
+          <div class="nm-title" id="next-mtg-title">Ward 7 Gram Sabha</div>
+          <div class="nm-sub">2026-03-15 • 10:00 AM</div>
+          <div class="nm-sub" id="next-mtg-venue">Community Hall, Ward 7</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUES -->
+  <div class="page" id="page-issues">
+    <div class="filters-row">
+      <div class="section-title" id="issues-page-title">Issues</div>
+      <div class="filter-selects">
+        <button class="report-btn-top" id="issues-report-btn" onclick="openModal()">+ Report</button>
+        <select class="filter-select" id="filter-status" onchange="renderIssues()"></select>
+        <select class="filter-select" id="filter-level" onchange="renderIssues()"></select>
+      </div>
+    </div>
+    <div class="issues-count" id="issues-count"></div>
+    <div id="all-issues"></div>
+  </div>
+
+  <!-- SCHEMES -->
+  <div class="page" id="page-schemes">
+    <div class="section-title" id="schemes-title">Government Schemes</div>
+    <div class="schemes-grid" id="schemes-grid"></div>
+  </div>
+
+  <!-- MEETINGS -->
+  <div class="page" id="page-meetings">
+    <div class="section-title" id="meetings-title">Public Meetings</div>
+    <div id="meetings-list"></div>
+  </div>
+
+  <!-- AGRICULTURE -->
+  <div class="page" id="page-agri">
+    <div class="agri-banner">
+      <h2 id="agri-banner-title">🌾 Krishi Seva — కృషి సేవ — कृषि सेवा</h2>
+      <p id="agri-banner-sub">AI-powered agriculture support for farmers &amp; labourers of Sirpur Kagaznagar</p>
+    </div>
+    <!-- Sub tabs -->
+    <div class="agri-tabs">
+      <button class="agri-tab active" onclick="showAgriTab('advisor')"  id="atab-advisor">🧑‍🌾 Crop Advisor</button>
+      <button class="agri-tab" onclick="showAgriTab('mandi')"   id="atab-mandi">📈 Mandi Prices</button>
+      <button class="agri-tab" onclick="showAgriTab('schemes')" id="atab-schemes">📜 Farmer Schemes</button>
+      <button class="agri-tab" onclick="showAgriTab('labour')"  id="atab-labour">👷 Labour Board</button>
+      <button class="agri-tab" onclick="showAgriTab('mgnrega')" id="atab-mgnrega">🏗️ MGNREGA</button>
+    </div>
+
+    <!-- CROP ADVISOR -->
+    <div class="agri-section active" id="asec-advisor">
+      <div class="agri-form-card">
+        <h3>🧑‍🌾 <span id="agri-advisor-title">AI Crop Advisory — Tell us about your farm</span></h3>
+        <div class="agri-grid">
+          <div class="form-group">
+            <label class="form-label" id="agri-lbl-crop">Current / Planned Crop</label>
+            <select class="form-select" id="agri-crop">
+              <option value="Cotton">Cotton — कपास — పత్తి</option>
+              <option value="Soybean">Soybean — सोयाबीन — సోయాబీన్</option>
+              <option value="Rice">Rice — धान — వరి</option>
+              <option value="Wheat">Wheat — गेहूं — గోధుమ</option>
+              <option value="Turmeric">Turmeric — हल्दी — పసుపు</option>
+              <option value="Chilli">Chilli — मिर्च — మిర్చి</option>
+              <option value="Toor Dal">Toor Dal — तुअर दाल — కంది పప్పు</option>
+              <option value="Maize">Maize — मक्का — మొక్కజొన్న</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="agri-lbl-soil">Soil Type</label>
+            <select class="form-select" id="agri-soil">
+              <option value="Black Cotton Soil">Black Cotton Soil — काली मिट्टी — నల్ల నేల</option>
+              <option value="Red Soil">Red Soil — लाल मिट्टी — ఎర్ర నేల</option>
+              <option value="Sandy Loam">Sandy Loam — बलुई दोमट — ఇసుక నేల</option>
+              <option value="Clay">Clay — चिकनी मिट्टी — బంకమట్టి</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="agri-lbl-land">Land Size (Acres)</label>
+            <select class="form-select" id="agri-land">
+              <option value="less than 1 acre">Less than 1 acre</option>
+              <option value="1-2 acres">1–2 acres</option>
+              <option value="2-5 acres" selected>2–5 acres</option>
+              <option value="5-10 acres">5–10 acres</option>
+              <option value="more than 10 acres">More than 10 acres</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="agri-lbl-season">Season</label>
+            <select class="form-select" id="agri-season">
+              <option value="Kharif (June-October)">Kharif — खरीफ — ఖరీఫ్ (June–Oct)</option>
+              <option value="Rabi (November-March)">Rabi — रबी — రబీ (Nov–Mar)</option>
+              <option value="Zaid (March-June)">Zaid — जायद — జాయద్ (Mar–Jun)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="agri-lbl-water">Water Source</label>
+            <select class="form-select" id="agri-water">
+              <option value="Rain-fed only">Rain-fed only — वर्षाश्रित</option>
+              <option value="Borewell">Borewell — बोरवेल</option>
+              <option value="Canal irrigation">Canal irrigation — नहर सिंचाई</option>
+              <option value="Drip irrigation">Drip irrigation — ड्रिप सिंचाई</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" id="agri-lbl-problem">Current Problem (optional)</label>
+            <input class="form-input" id="agri-problem" placeholder="e.g. yellow leaves, pest attack, low yield…"/>
+          </div>
+        </div>
+        <button class="agri-btn" onclick="getCropAdvice()" id="agri-advice-btn">🤖 Get AI Advice — सलाह लें — సలహా తీసుకోండి</button>
+        <div class="agri-result" id="agri-advice-result">
+          <h4 id="agri-result-title">🌱 AI Recommendations</h4>
+          <p id="agri-advice-text"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANDI PRICES -->
+    <div class="agri-section" id="asec-mandi">
+      <div class="agri-form-card">
+        <h3>📈 <span id="agri-mandi-title">Today's Mandi Prices — Sirpur Kagaznagar APMC</span></h3>
+        <div style="font-size:12px;color:#64748B;margin-bottom:14px;" id="agri-mandi-note">Rates in ₹ per quintal (100 kg) • Updated: March 2026</div>
+        <div class="mandi-grid" id="mandi-prices-grid"></div>
+        <div style="margin-top:16px;padding:12px;background:#FEF9C3;border-radius:10px;font-size:12px;color:#713F12;">
+          ⚠️ <span id="agri-mandi-disclaimer">Prices shown are indicative. Verify at local APMC before selling.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FARMER SCHEMES -->
+    <div class="agri-section" id="asec-schemes">
+      <div id="farmer-schemes-grid" class="schemes-grid"></div>
+    </div>
+
+    <!-- LABOUR BOARD -->
+    <div class="agri-section" id="asec-labour">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <div class="section-title" id="agri-labour-title">Farm Labour Board — కూలీల బోర్డు</div>
+        <button class="agri-btn" style="width:auto;padding:10px 18px;" onclick="openLabourModal()" id="agri-post-btn">+ Post Requirement</button>
+      </div>
+      <div id="labour-board-list"></div>
+    </div>
+
+    <!-- MGNREGA -->
+    <div class="agri-section" id="asec-mgnrega">
+      <div class="agri-form-card">
+        <h3>🏗️ <span id="agri-mgnrega-title">MGNREGA — Job Card & Wage Status</span></h3>
+        <div id="mgnrega-cards"></div>
+      </div>
+      <div class="agri-form-card" style="margin-top:0;">
+        <h3>💰 <span id="agri-wage-title">Official Minimum Wage Rates — Telangana 2026</span></h3>
+        <div id="wage-table"></div>
+        <div style="margin-top:12px;padding:12px;background:#FEE2E2;border-radius:10px;font-size:12px;color:#991B1B;">
+          ⚠️ <span id="agri-wage-note">If paid below minimum wage, file a complaint using the Issues tab. It is your legal right.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end #app -->
+
+<!-- LABOUR POST MODAL -->
+<div id="labour-modal-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:900;display:none;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:#fff;border-radius:20px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;">
+    <div style="background:linear-gradient(135deg,#2D6A4F,#1B4332);padding:18px 20px;border-radius:20px 20px 0 0;">
+      <h3 style="color:#fff;font-size:17px;font-weight:800;">👷 Post Labour Requirement</h3>
+      <p style="color:rgba(255,255,255,0.8);font-size:13px;">కూలీల అవసరం నివేదించండి</p>
+    </div>
+    <div style="padding:20px;display:flex;flex-direction:column;gap:14px;">
+      <div><label class="form-label">Work Type *</label>
+        <select class="form-select" id="lb-type">
+          <option>Harvesting — కోత</option><option>Sowing — విత్తనాలు</option>
+          <option>Weeding — కలుపు తీయడం</option><option>Irrigation — నీటి పారుదల</option>
+          <option>Spraying — పిచికారీ</option><option>Loading/Transport — రవాణా</option>
+        </select>
+      </div>
+      <div><label class="form-label">Village / Location *</label>
+        <input class="form-input" id="lb-loc" placeholder="Village name, area"/></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div><label class="form-label">Date Required</label>
+          <input class="form-input" id="lb-date" type="date"/></div>
+        <div><label class="form-label">Labourers Needed</label>
+          <select class="form-select" id="lb-count">
+            <option>1-2</option><option>3-5</option><option>6-10</option><option>10+</option>
+          </select>
+        </div>
+      </div>
+      <div><label class="form-label">Daily Wage Offered (₹)</label>
+        <input class="form-input" id="lb-wage" placeholder="e.g. 400"/></div>
+      <div><label class="form-label">Contact Number *</label>
+        <input class="form-input" id="lb-phone" placeholder="10-digit mobile number"/></div>
+      <div style="display:flex;gap:10px;margin-top:4px;">
+        <button class="cancel-btn" onclick="closeLabourModal()">Cancel</button>
+        <button class="submit-btn" onclick="submitLabour()" style="background:linear-gradient(135deg,#2D6A4F,#1B4332);">Post Requirement ✓</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REPORT MODAL -->
+<div id="modal-overlay">
+  <div id="modal-box">
+    <div class="modal-header">
+      <h3 id="modal-title">📢 Report an Issue</h3>
+      <p id="modal-sub">Your voice matters — शिकायत दर्ज करें — మీ గొంతు వినిపించండి</p>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label" id="f-label-title">Issue Title *</label>
+        <input class="form-input" id="f-title" placeholder="Brief description of the problem"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" id="f-label-loc">Your Location / Address *</label>
+        <input class="form-input" id="f-location" placeholder="Ward, Street, Landmark"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label" id="f-label-desc">Detailed Description *</label>
+        <textarea class="form-textarea" id="f-desc" rows="3" placeholder="Describe the problem in detail..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" id="f-label-cat">Category</label>
+          <select class="form-select" id="f-category"></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" id="f-label-pri">Priority</label>
+          <select class="form-select" id="f-priority"></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" id="f-label-lev">Level</label>
+          <select class="form-select" id="f-level"></select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="cancel-btn" id="cancel-btn" onclick="closeModal()">Cancel</button>
+        <button class="submit-btn" id="submit-btn" onclick="submitIssue()">Submit Complaint ✓</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI CHAT -->
+<button id="chat-fab" onclick="toggleChat()">🤖</button>
+<div id="chat-box">
+  <div class="chat-header">
+    <div class="chat-bot-icon">🤖</div>
+    <div><div class="chat-header-title" id="chat-title">Jan Sahayak AI</div><div class="chat-header-sub" id="chat-sub">Your governance helper</div></div>
+    <button class="chat-close" onclick="toggleChat()">×</button>
+  </div>
+  <div id="chat-messages"></div>
+  <div class="chat-quick" id="chat-quick-btns"></div>
+  <div class="chat-input-row">
+    <input id="chat-input" placeholder="Ask anything…" onkeydown="if(event.key==='Enter')sendChat()"/>
+    <button id="chat-send" onclick="sendChat()">↑</button>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  TRANSLATIONS
+// ══════════════════════════════════════════════════════════
+var T = {
+  en: {
+    // Login
+    loginHeading:   'SELECT YOUR ROLE TO CONTINUE',
+    roleCitizen:    'Citizen',         roleCitizenSub: 'Report issues, track complaints, apply for schemes',
+    roleWard:       'Ward Officer',    roleWardSub:    'Manage Ward 7 issues and citizen requests',
+    roleGram:       'Gram Pradhan',    roleGramSub:    'Durganagar Gram Panchayat administration',
+    roleMuni:       'Municipal Commissioner', roleMuniSub: 'Full municipality oversight and analytics',
+    // Header / tabs
+    logout:         'LOGOUT',
+    tabDashboard:   '📊 Dashboard',   tabIssues: '📋 Issues',  tabSchemes: '📜 Schemes', tabMeetings: '🤝 Meetings',
+    tabIssuesCit:   '📋 My Issues',
+    // Dashboard
+    welcomeGreet:   'Namaste',        citizenPortal: 'Citizen Portal',  adminPanel: 'Admin Panel',
+    reportIssue:    '+ Report Issue',
+    statTotal:      'Total Issues',   statOpen: 'Open',        statProg: 'In Progress', statRes: 'Resolved',
+    statOpenSub:    'Needs attention',statProgSub:'Being worked on', statResSub:'Completed',
+    recentTitle:    'Recent Issues',  quickTitle: 'Quick Actions',
+    nextMtgLabel:   '📅 NEXT MEETING',
+    // Quick actions citizen
+    qaWater:'Water complaint', qaLight:'Streetlight issue', qaRoad:'Road / pothole', qaCert:'Certificate help',
+    // Quick actions admin
+    qaViewIssues:'View all issues', qaSchemes:'Manage schemes', qaMeetings:'Meetings',
+    // Issues page
+    issuesPageTitle:'All Issues',     issuesPageTitleCit:'Community Issues',
+    filterAll:'All',
+    filterStatus:['All','Open','In Progress','Under Review','Resolved'],
+    filterLevel:['All','ward','gram','municipality'],
+    issuesFound:' issues found',
+    reportBtn:'+ Report',
+    // Issue card
+    votes:'VOTES',  assignedTo:'👷 Assigned to:',  updates:'UPDATES',
+    statusBtns:['Open','In Progress','Under Review','Resolved'],
+    // Schemes
+    schemesTitle:'Government Schemes • सरकारी योजनाएं',
+    benefit:'Benefit', eligible:'Eligible', deadline:'Deadline', applied:'Applied',
+    applyBtn:'Apply Now',
+    // Meetings
+    meetingsTitle:'Public Meetings • सभाएं',
+    registered:'registered', registerBtn:'Register',
+    agenda:'AGENDA',
+    // Modal
+    modalTitle:'📢 Report an Issue',
+    modalSub:'Your voice matters',
+    fTitle:'Issue Title *', fLoc:'Your Location / Address *', fDesc:'Detailed Description *',
+    fCat:'Category', fPri:'Priority', fLev:'Level',
+    categories:['Infrastructure','Water & Sanitation','Electricity','Documents & Certificates','Sanitation','Health','Other'],
+    priorities:['Low','Medium','High','Critical'],
+    levels:['ward','gram','municipality'],
+    cancelBtn:'Cancel', submitBtn:'Submit Complaint ✓',
+    fillFields:'Please fill all required fields',
+    issueReported:'✅ Issue reported! ID: ',
+    issueUpdated:'Issue updated to: ',
+    appInitiated:'Application initiated!',
+    regFor:'Registered for ',
+    // Chat
+    chatTitle:'Jan Sahayak AI', chatSub:'Your governance helper',
+    chatWelcome:'Namaste! I\'m Jan Sahayak, your AI helper for local governance.\n\nAsk me about:\n• How to file a complaint\n• Government schemes you qualify for\n• Documents required for certificates\n• Meeting schedules\n• Status of your issues',
+    chatQ1:'File complaint', chatQ2:'Check scheme', chatQ3:'Get certificate',
+    chatPlaceholder:'Ask anything about governance…',
+    chatThinking:'Thinking…',
+    langLabel:'🌐 LANGUAGE:',
+    appSubtitle:'LOCAL GOVERNANCE PLATFORM',
+  },
+
+  hi: {
+    loginHeading:   'अपनी भूमिका चुनें',
+    roleCitizen:    'नागरिक',          roleCitizenSub: 'शिकायत दर्ज करें, स्थिति ट्रैक करें, योजनाओं के लिए आवेदन करें',
+    roleWard:       'वार्ड अधिकारी',  roleWardSub:    'वार्ड 7 की समस्याओं और नागरिक अनुरोधों का प्रबंधन',
+    roleGram:       'ग्राम प्रधान',   roleGramSub:    'कोरेगांव ग्राम पंचायत प्रशासन',
+    roleMuni:       'नगर आयुक्त',     roleMuniSub:    'नगर पालिका की पूर्ण निगरानी और विश्लेषण',
+    logout:         'लॉगआउट',
+    tabDashboard:   '📊 डैशबोर्ड',   tabIssues: '📋 समस्याएं', tabSchemes: '📜 योजनाएं', tabMeetings: '🤝 सभाएं',
+    tabIssuesCit:   '📋 मेरी समस्याएं',
+    welcomeGreet:   'नमस्ते',         citizenPortal: 'नागरिक पोर्टल', adminPanel: 'व्यवस्थापक पैनल',
+    reportIssue:    '+ शिकायत दर्ज करें',
+    statTotal:      'कुल समस्याएं',   statOpen:'खुली',     statProg:'जारी है',  statRes:'हल हुई',
+    statOpenSub:    'ध्यान चाहिए',    statProgSub:'काम हो रहा है', statResSub:'पूर्ण',
+    recentTitle:    'हाल की समस्याएं', quickTitle:'त्वरित कार्य',
+    nextMtgLabel:   '📅 अगली सभा',
+    qaWater:'पानी की शिकायत', qaLight:'स्ट्रीटलाइट समस्या', qaRoad:'सड़क / गड्ढा', qaCert:'प्रमाणपत्र सहायता',
+    qaViewIssues:'सभी समस्याएं देखें', qaSchemes:'योजनाएं प्रबंधित करें', qaMeetings:'सभाएं',
+    issuesPageTitle:'सभी समस्याएं',   issuesPageTitleCit:'सामुदायिक समस्याएं',
+    filterAll:'सभी',
+    filterStatus:['सभी','खुली','जारी है','समीक्षाधीन','हल हुई'],
+    filterStatusVal:['All','Open','In Progress','Under Review','Resolved'],
+    filterLevel:['सभी','वार्ड','ग्राम','नगर पालिका'],
+    filterLevelVal:['All','ward','gram','municipality'],
+    issuesFound:' समस्याएं मिलीं',
+    reportBtn:'+ शिकायत',
+    votes:'वोट', assignedTo:'👷 सौंपा गया:', updates:'अपडेट',
+    statusBtns:['खुली','जारी है','समीक्षाधीन','हल हुई'],
+    statusBtnVals:['Open','In Progress','Under Review','Resolved'],
+    schemesTitle:'सरकारी योजनाएं',
+    benefit:'लाभ', eligible:'पात्रता', deadline:'अंतिम तिथि', applied:'आवेदन',
+    applyBtn:'अभी आवेदन करें',
+    meetingsTitle:'सार्वजनिक सभाएं',
+    registered:'पंजीकृत', registerBtn:'पंजीकरण करें',
+    agenda:'एजेंडा',
+    modalTitle:'📢 शिकायत दर्ज करें',
+    modalSub:'आपकी आवाज़ मायने रखती है',
+    fTitle:'समस्या का शीर्षक *', fLoc:'आपका पता / स्थान *', fDesc:'विस्तृत विवरण *',
+    fCat:'श्रेणी', fPri:'प्राथमिकता', fLev:'स्तर',
+    categories:['बुनियादी ढांचा','जल और सफाई','बिजली','दस्तावेज़ और प्रमाणपत्र','स्वच्छता','स्वास्थ्य','अन्य'],
+    categoriesVal:['Infrastructure','Water & Sanitation','Electricity','Documents & Certificates','Sanitation','Health','Other'],
+    priorities:['कम','मध्यम','उच्च','अत्यंत उच्च'],
+    prioritiesVal:['Low','Medium','High','Critical'],
+    levels:['वार्ड','ग्राम','नगर पालिका'],
+    levelsVal:['ward','gram','municipality'],
+    cancelBtn:'रद्द करें', submitBtn:'शिकायत जमा करें ✓',
+    fillFields:'कृपया सभी आवश्यक फ़ील्ड भरें',
+    issueReported:'✅ शिकायत दर्ज हुई! ID: ',
+    issueUpdated:'समस्या अपडेट हुई: ',
+    appInitiated:'आवेदन शुरू हुआ!',
+    regFor:'पंजीकरण हुआ: ',
+    chatTitle:'जन सहायक AI', chatSub:'आपका शासन सहायक',
+    chatWelcome:'नमस्ते! मैं जन सहायक हूं, स्थानीय शासन के लिए आपका AI सहायक।\n\nमुझसे पूछें:\n• शिकायत कैसे दर्ज करें\n• आप किन सरकारी योजनाओं के पात्र हैं\n• प्रमाणपत्रों के लिए आवश्यक दस्तावेज़\n• सभा का कार्यक्रम\n• आपकी समस्याओं की स्थिति',
+    chatQ1:'शिकायत दर्ज करें', chatQ2:'योजना जांचें', chatQ3:'प्रमाणपत्र',
+    chatPlaceholder:'शासन के बारे में कुछ भी पूछें…',
+    chatThinking:'सोच रहा हूं…',
+    langLabel:'🌐 भाषा:',
+    appSubtitle:'स्थानीय शासन मंच',
+  },
+
+  te: {
+    loginHeading:   'మీ పాత్రను ఎంచుకోండి',
+    roleCitizen:    'పౌరుడు',          roleCitizenSub: 'సమస్యలు నివేదించండి, ఫిర్యాదులు ట్రాక్ చేయండి, పథకాలకు దరఖాస్తు చేయండి',
+    roleWard:       'వార్డ్ అధికారి', roleWardSub:    'వార్డ్ 7 సమస్యలు మరియు పౌర అభ్యర్థనలను నిర్వహించండి',
+    roleGram:       'గ్రామ ప్రధాన్',  roleGramSub:    'కోరేగావ్ గ్రామ పంచాయతీ పరిపాలన',
+    roleMuni:       'మునిసిపల్ కమిషనర్', roleMuniSub: 'పూర్తి పురపాలక పర్యవేక్షణ మరియు విశ్లేషణ',
+    logout:         'లాగ్అవుట్',
+    tabDashboard:   '📊 డాష్‌బోర్డ్', tabIssues: '📋 సమస్యలు', tabSchemes: '📜 పథకాలు', tabMeetings: '🤝 సభలు',
+    tabIssuesCit:   '📋 నా సమస్యలు',
+    welcomeGreet:   'నమస్తే',          citizenPortal: 'పౌర పోర్టల్', adminPanel: 'అడ్మిన్ పానెల్',
+    reportIssue:    '+ సమస్య నివేదించండి',
+    statTotal:      'మొత్తం సమస్యలు', statOpen:'తెరవబడింది', statProg:'పురోగతిలో', statRes:'పరిష్కరించబడింది',
+    statOpenSub:    'శ్రద్ధ అవసరం',   statProgSub:'పని జరుగుతోంది', statResSub:'పూర్తైంది',
+    recentTitle:    'ఇటీవలి సమస్యలు', quickTitle:'త్వరిత చర్యలు',
+    nextMtgLabel:   '📅 తదుపరి సభ',
+    qaWater:'నీటి ఫిర్యాదు', qaLight:'వీధి దీపాల సమస్య', qaRoad:'రోడ్డు / గుంత', qaCert:'సర్టిఫికెట్ సహాయం',
+    qaViewIssues:'అన్ని సమస్యలు చూడండి', qaSchemes:'పథకాలు నిర్వహించండి', qaMeetings:'సభలు',
+    issuesPageTitle:'అన్ని సమస్యలు',  issuesPageTitleCit:'సమాజ సమస్యలు',
+    filterAll:'అన్నీ',
+    filterStatus:['అన్నీ','తెరవబడింది','పురోగతిలో','సమీక్షలో','పరిష్కరించబడింది'],
+    filterStatusVal:['All','Open','In Progress','Under Review','Resolved'],
+    filterLevel:['అన్నీ','వార్డ్','గ్రామం','పురపాలక'],
+    filterLevelVal:['All','ward','gram','municipality'],
+    issuesFound:' సమస్యలు కనుగొనబడ్డాయి',
+    reportBtn:'+ నివేదించండి',
+    votes:'ఓట్లు', assignedTo:'👷 అప్పగించబడింది:', updates:'నవీకరణలు',
+    statusBtns:['తెరవబడింది','పురోగతిలో','సమీక్షలో','పరిష్కరించబడింది'],
+    statusBtnVals:['Open','In Progress','Under Review','Resolved'],
+    schemesTitle:'ప్రభుత్వ పథకాలు',
+    benefit:'ప్రయోజనం', eligible:'అర్హత', deadline:'చివరి తేదీ', applied:'దరఖాస్తు చేసారు',
+    applyBtn:'ఇప్పుడు దరఖాస్తు చేయండి',
+    meetingsTitle:'బహిరంగ సభలు',
+    registered:'నమోదు చేసారు', registerBtn:'నమోదు చేయండి',
+    agenda:'అజెండా',
+    modalTitle:'📢 సమస్య నివేదించండి',
+    modalSub:'మీ గొంతు వినిపించండి',
+    fTitle:'సమస్య శీర్షిక *', fLoc:'మీ చిరునామా / స్థానం *', fDesc:'వివరణాత్మక వివరణ *',
+    fCat:'వర్గం', fPri:'ప్రాధాన్యత', fLev:'స్థాయి',
+    categories:['మౌలిక సదుపాయాలు','నీరు మరియు పారిశుధ్యం','విద్యుత్','పత్రాలు మరియు సర్టిఫికెట్లు','పారిశుధ్యం','ఆరోగ్యం','ఇతరత్రా'],
+    categoriesVal:['Infrastructure','Water & Sanitation','Electricity','Documents & Certificates','Sanitation','Health','Other'],
+    priorities:['తక్కువ','మధ్యమ','అధిక','అత్యంత అధిక'],
+    prioritiesVal:['Low','Medium','High','Critical'],
+    levels:['వార్డ్','గ్రామం','పురపాలక'],
+    levelsVal:['ward','gram','municipality'],
+    cancelBtn:'రద్దు చేయండి', submitBtn:'ఫిర్యాదు సమర్పించండి ✓',
+    fillFields:'దయచేసి అన్ని అవసరమైన ఫీల్డ్‌లను పూరించండి',
+    issueReported:'✅ సమస్య నివేదించబడింది! ID: ',
+    issueUpdated:'సమస్య నవీకరించబడింది: ',
+    appInitiated:'దరఖాస్తు ప్రారంభమైంది!',
+    regFor:'నమోదు చేయబడింది: ',
+    chatTitle:'జన్ సహాయక్ AI', chatSub:'మీ పాలన సహాయకుడు',
+    chatWelcome:'నమస్తే! నేను జన్ సహాయక్, స్థానిక పాలన కోసం మీ AI సహాయకుడిని.\n\nనన్ను అడగండి:\n• ఫిర్యాదు ఎలా దాఖలు చేయాలి\n• మీకు అర్హమైన ప్రభుత్వ పథకాలు\n• సర్టిఫికెట్లకు అవసరమైన పత్రాలు\n• సభల షెడ్యూల్\n• మీ సమస్యల స్థితి',
+    chatQ1:'ఫిర్యాదు దాఖలు', chatQ2:'పథకం తనిఖీ', chatQ3:'సర్టిఫికెట్',
+    chatPlaceholder:'పాలన గురించి ఏదైనా అడగండి…',
+    chatThinking:'ఆలోచిస్తున్నాను…',
+    langLabel:'🌐 భాష:',
+    appSubtitle:'స్థానిక పాలన వేదిక',
+  }
+};
+
+// ══════════════════════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════════════════════
+var currentLang = 'en';
+var currentUser = null;
+var chatOpen = false;
+var chatMessages = [];
+
+var USERS = {
+  citizen:    {name:'Ramesh Patil',     role:'citizen',               ward:'Ward 7',      location:'Sirpur Kagaznagar Municipality',       avatar:'RP'},
+  admin_ward: {name:'Priya Sharma',     role:'ward_officer',          ward:'Ward 7',      location:'Sirpur Kagaznagar Municipality',       avatar:'PS'},
+  admin_gram: {name:'Suresh Jadhav',    role:'gram_pradhan',          ward:'Durganagar', location:'Durganagar Gram Panchayat',   avatar:'SJ'},
+  admin_muni: {name:'Collector Mehta',  role:'municipal_commissioner',ward:'All Wards',   location:'Sirpur Kagaznagar Municipality',       avatar:'CM'},
+};
+
+var issues = [
+  {id:'ISS001',title:'Broken streetlight on Main Road',     status:'In Progress', priority:'High',    level:'ward',         location:'Ward 7, Near Bus Stop',      submittedBy:'Ramesh Patil',    date:'2026-02-28',upvotes:34,description:'Three streetlights have been non-functional for 2 weeks causing safety concerns at night.',assignedTo:'Ward Engineer',     comments:[{author:'Ward Officer',text:'Work order raised. Team will visit in 2 days.',date:'2026-03-01'}],expanded:false},
+  {id:'ISS002',title:'Water supply disruption – 3 days',    status:'Resolved',    priority:'Critical',level:'gram',         location:'Durganagar, Sector B',      submittedBy:'Anita Deshpande', date:'2026-02-20',upvotes:89,description:'Complete water supply failure for 3 consecutive days. Borewell also non-functional.',assignedTo:'GP Water Committee',comments:[{author:'Gram Pradhan',text:'Emergency water tanker arranged. Pipeline repair completed.',date:'2026-02-23'}],expanded:false},
+  {id:'ISS003',title:'Garbage not collected – 10 days',     status:'Open',        priority:'High',    level:'municipality', location:'Ward 12, Sector C',          submittedBy:'Mohan Kulkarni',  date:'2026-03-01',upvotes:56,description:'Municipal garbage truck not collecting from our street for over 10 days. Causing hygiene issues.',assignedTo:null,comments:[],expanded:false},
+  {id:'ISS004',title:'Road pothole causing accidents',       status:'Under Review',priority:'Medium',  level:'ward',         location:'Ward 7, SH-27',              submittedBy:'Kavita More',     date:'2026-03-03',upvotes:21,description:'Large pothole on state highway near school. Two minor accidents reported.',assignedTo:null,comments:[],expanded:false},
+  {id:'ISS005',title:'Birth certificate delay – 3 months',  status:'Open',        priority:'Medium',  level:'municipality', location:'Sirpur Kagaznagar Municipality Office', submittedBy:'Deepak Nair',     date:'2026-03-04',upvotes:12,description:'Applied for birth certificate 3 months ago. Multiple follow-ups. No response.',assignedTo:null,comments:[],expanded:false},
+];
+
+var SCHEMES = [
+  {name:'PM Awas Yojana',         category:'Housing',     eligibility:'BPL families',           deadline:'2026-06-30',applied:234, benefit:'₹1.2 Lakh subsidy'},
+  {name:'Jal Jeevan Mission',     category:'Water',       eligibility:'Rural households',       deadline:'Ongoing',   applied:567, benefit:'Piped water connection'},
+  {name:'Swachh Bharat Mission',  category:'Sanitation',  eligibility:'All households',         deadline:'2026-12-31',applied:890, benefit:'Toilet construction grant'},
+  {name:'Kisan Samman Nidhi',     category:'Agriculture', eligibility:'Small/Marginal farmers', deadline:'Ongoing',   applied:1203,benefit:'₹6000/year'},
+  {name:'Pradhan Mantri Ujjwala', category:'Energy',      eligibility:'BPL women',              deadline:'2026-09-30',applied:445, benefit:'Free LPG connection'},
+];
+
+var MEETINGS = [
+  {title:'Ward 7 Gram Sabha',      date:'2026-03-15',time:'10:00 AM',venue:'Community Hall, Ward 7',  agenda:['Road repair budget approval','Water connection applications','Streetlight tender review'],attendees:45},
+  {title:'Municipal Budget Review',date:'2026-03-20',time:'11:00 AM',venue:'Municipal Headquarters',  agenda:['FY2026-27 Budget presentation','Infrastructure projects','Citizen grievance report'],   attendees:12},
+];
+
+var BADGE_COLORS = {
+  'Open':{'bg':'#FEF3C7','tx':'#92400E'},'In Progress':{'bg':'#DBEAFE','tx':'#1E40AF'},
+  'Resolved':{'bg':'#D1FAE5','tx':'#065F46'},'Under Review':{'bg':'#EDE9FE','tx':'#5B21B6'},
+  'Critical':{'bg':'#FEE2E2','tx':'#991B1B'},'High':{'bg':'#FFEDD5','tx':'#9A3412'},
+  'Medium':{'bg':'#FEF9C3','tx':'#713F12'},'Low':{'bg':'#F0FDF4','tx':'#166534'},
+  'ward':{'bg':'#E0F2FE','tx':'#0369A1'},'gram':{'bg':'#F0FDF4','tx':'#15803D'},
+  'municipality':{'bg':'#FDF4FF','tx':'#7E22CE'},
+};
+
+function badge(val){
+  var s=BADGE_COLORS[val]||{bg:'#F1F5F9',tx:'#334155'};
+  return '<span class="badge" style="background:'+s.bg+';color:'+s.tx+'">'+val+'</span>';
+}
+
+// ══════════════════════════════════════════════════════════
+//  GRAM PANCHAYAT DATA
+// ══════════════════════════════════════════════════════════
+var GRAM_PANCHAYATS = [
+  {id:'GP01', name:'Nazrul Nagar GP',    villages:'Nazrul Nagar, Ambedkar Colony', population:'4,210', issues:3},
+  {id:'GP02', name:'Durga Nagar GP',     villages:'Durga Nagar, Rampur',           population:'4,820', issues:2},
+  {id:'GP03', name:'Kagaznagar GP',      villages:'Kagaznagar, Mamda',             population:'5,640', issues:5},
+  {id:'GP04', name:'Sirpur Village GP',  villages:'Sirpur Village, Kothur',        population:'3,210', issues:2},
+  {id:'GP05', name:'Asifabad GP',        villages:'Asifabad, Wankidi',             population:'2,980', issues:1},
+  {id:'GP06', name:'Luxettipet GP',      villages:'Luxettipet, Bellampalli Rd',    population:'3,750', issues:4},
+  {id:'GP07', name:'Mandamarri GP',      villages:'Mandamarri, Naspur',            population:'6,100', issues:2},
+];
+
+var selectedGP = null;
+var gpSelectorExpanded = true;
+
+function renderGPSelector(){
+  // Nothing to render — dropdown is static HTML
+}
+
+function selectGP(gpId){
+  if(!gpId){ selectedGP=null; updateWelcome(); renderDashboard(); return; }
+  selectedGP = GRAM_PANCHAYATS.find(function(g){ return g.id===gpId; });
+  if(!selectedGP) return;
+  // Update header
+  document.getElementById('hdr-ward').textContent = selectedGP.name;
+  document.getElementById('hdr-loc').textContent = selectedGP.name+' • Sirpur Kagaznagar Municipality';
+  // Show info bar
+  var infoBar = document.getElementById('gp-info-bar');
+  var infoTxt = document.getElementById('gp-info-text');
+  if(infoBar && infoTxt){
+    infoBar.style.display='block';
+    infoTxt.textContent = '📍 '+selectedGP.villages+' • 👥 Population: '+selectedGP.population+' • 📋 '+selectedGP.issues+' active issues';
+  }
+  var lbl = document.getElementById('gp-selected-label');
+  var txt = document.getElementById('gp-selected-text');
+  if(lbl && txt){ lbl.style.display='block'; txt.textContent = selectedGP.name; }
+  updateWelcome(); renderDashboard(); renderIssues();
+  showToast('✅ Now managing: '+selectedGP.name);
+}
+
+function selectWard(wardNum){
+  if(!wardNum) return;
+  var wardName = 'Ward No. '+wardNum;
+  document.getElementById('hdr-ward').textContent = wardName;
+  document.getElementById('hdr-loc').textContent = wardName+' • Sirpur Kagaznagar Municipality';
+  var infoBar = document.getElementById('ward-info-bar');
+  var infoTxt = document.getElementById('ward-info-text');
+  if(infoBar && infoTxt){
+    infoBar.style.display='block';
+    infoTxt.textContent = '🏠 Managing '+wardName+' • Sirpur Kagaznagar Municipality';
+  }
+  currentUser.ward = wardName;
+  updateWelcome(); renderDashboard(); renderIssues();
+  showToast('✅ Now managing: '+wardName);
+}
+
+// ══════════════════════════════════════════════════════════
+//  LANGUAGE SWITCH
+// ══════════════════════════════════════════════════════════
+function setLang(lang){
+  currentLang = lang;
+  var t = T[lang];
+  // update lang buttons
+  ['en','hi','te'].forEach(function(l){
+    var b1=document.getElementById('lb-'+l);
+    var b2=document.querySelectorAll('#login-lang-bar .lang-btn');
+    if(b1){ b1.classList.toggle('active', l===lang); }
+  });
+  // login lang bar
+  var lbBtns = document.querySelectorAll('#login-lang-bar .lang-btn');
+  lbBtns.forEach(function(b){
+    var bl = b.getAttribute('onclick').match(/'([^']+)'/)[1];
+    b.classList.toggle('active', bl===lang);
+  });
+  // app lang bar
+  ['en','hi','te'].forEach(function(l){
+    var el=document.getElementById('lb-'+l);
+    if(el) el.classList.toggle('active', l===lang);
+  });
+
+  // Login page texts
+  set('login-heading', t.loginHeading);
+  set('role-citizen', t.roleCitizen);
+  set('role-citizen-sub', t.roleCitizenSub);
+  set('role-ward', t.roleWard);
+  set('role-ward-sub', t.roleWardSub);
+  set('role-gram', t.roleGram);
+  set('role-gram-sub', t.roleGramSub);
+  set('role-muni', t.roleMuni);
+  set('role-muni-sub', t.roleMuniSub);
+  // Header
+  set('logout-btn', t.logout);
+  set('lang-label', t.langLabel);
+  set('app-title', 'JAN SEVA');
+  // Tabs
+  var isAdmin = currentUser && currentUser.role !== 'citizen';
+  set('tab-dashboard', t.tabDashboard);
+  set('tab-issues', isAdmin ? t.tabIssues : t.tabIssuesCit);
+  set('tab-schemes', t.tabSchemes);
+  set('tab-meetings', t.tabMeetings);
+  // Dashboard
+  set('banner-report-btn', t.reportIssue);
+  set('s-total-label', t.statTotal);
+  set('s-open-label', t.statOpen);
+  set('s-open-sub', t.statOpenSub);
+  set('s-prog-label', t.statProg);
+  set('s-prog-sub', t.statProgSub);
+  set('s-res-label', t.statRes);
+  set('s-res-sub', t.statResSub);
+  set('recent-title', t.recentTitle);
+  set('quick-title', t.quickTitle);
+  set('next-mtg-label', t.nextMtgLabel);
+  // Issues page
+  set('issues-page-title', isAdmin ? t.issuesPageTitle : t.issuesPageTitleCit);
+  set('issues-report-btn', t.reportBtn);
+  set('schemes-title', t.schemesTitle);
+  set('meetings-title', t.meetingsTitle);
+  // Modal
+  set('modal-title', t.modalTitle);
+  set('modal-sub', t.modalSub);
+  set('f-label-title', t.fTitle);
+  set('f-label-loc', t.fLoc);
+  set('f-label-desc', t.fDesc);
+  set('f-label-cat', t.fCat);
+  set('f-label-pri', t.fPri);
+  set('f-label-lev', t.fLev);
+  set('cancel-btn', t.cancelBtn);
+  set('submit-btn', t.submitBtn);
+  // Chat
+  set('chat-title', t.chatTitle);
+  set('chat-sub', t.chatSub);
+  var ci = document.getElementById('chat-input');
+  if(ci) ci.placeholder = t.chatPlaceholder;
+  // Rebuild filter dropdowns
+  buildFilterDropdowns();
+  buildModalDropdowns();
+  buildChatQuickBtns();
+  // Re-render pages
+  if(currentUser){
+    renderDashboard();
+    renderIssues();
+    renderSchemes();
+    renderMeetings();
+    updateWelcome();
+  }
+}
+
+function set(id, val){ var el=document.getElementById(id); if(el) el.textContent=val; }
+
+function buildFilterDropdowns(){
+  var t=T[currentLang];
+  var fs=document.getElementById('filter-status');
+  var fl=document.getElementById('filter-level');
+  if(!fs||!fl)return;
+  var statuses = t.filterStatus || t.filterStatusVal || ['All','Open','In Progress','Under Review','Resolved'];
+  var statVals = t.filterStatusVal || statuses;
+  var levels   = t.filterLevel   || t.filterLevelVal || ['All','ward','gram','municipality'];
+  var levVals  = t.filterLevelVal || levels;
+  fs.innerHTML=''; statuses.forEach(function(s,i){ var o=document.createElement('option'); o.value=statVals[i]||s; o.textContent=s; fs.appendChild(o); });
+  fl.innerHTML=''; levels.forEach(function(l,i){   var o=document.createElement('option'); o.value=levVals[i]||l;  o.textContent=l; fl.appendChild(o); });
+}
+
+function buildModalDropdowns(){
+  var t=T[currentLang];
+  var fc=document.getElementById('f-category');
+  var fp=document.getElementById('f-priority');
+  var fl=document.getElementById('f-level');
+  if(!fc||!fp||!fl)return;
+  var cats=t.categories||[]; var catVals=t.categoriesVal||cats;
+  var pris=t.priorities||[];  var priVals=t.prioritiesVal||pris;
+  var levs=t.levels||[];      var levVals=t.levelsVal||levs;
+  fc.innerHTML=''; cats.forEach(function(c,i){ var o=document.createElement('option'); o.value=catVals[i]||c; o.textContent=c; fc.appendChild(o); });
+  fp.innerHTML=''; pris.forEach(function(p,i){ var o=document.createElement('option'); o.value=priVals[i]||p; o.textContent=p; fp.appendChild(o); });
+  fl.innerHTML=''; levs.forEach(function(l,i){ var o=document.createElement('option'); o.value=levVals[i]||l; o.textContent=l; fl.appendChild(o); });
+  // set Medium as default
+  if(fp.options.length>1) fp.selectedIndex=1;
+}
+
+function buildChatQuickBtns(){
+  var t=T[currentLang];
+  var el=document.getElementById('chat-quick-btns');
+  if(!el)return;
+  el.innerHTML=
+    '<button class="chat-quick-btn" onclick="quickChat(\''+t.chatQ1+'\')">'+t.chatQ1+'</button>'+
+    '<button class="chat-quick-btn" onclick="quickChat(\''+t.chatQ2+'\')">'+t.chatQ2+'</button>'+
+    '<button class="chat-quick-btn" onclick="quickChat(\''+t.chatQ3+'\')">'+t.chatQ3+'</button>';
+}
+
+// ══════════════════════════════════════════════════════════
+//  LOGIN / LOGOUT
+// ══════════════════════════════════════════════════════════
+function login(key){
+  currentUser=USERS[key];
+  chatMessages=[{role:'ai',text:T[currentLang].chatWelcome}];
+  document.getElementById('login-page').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('chat-fab').style.display='flex';
+  document.getElementById('chat-fab').style.alignItems='center';
+  document.getElementById('chat-fab').style.justifyContent='center';
+  document.getElementById('hdr-loc').textContent=currentUser.location;
+  document.getElementById('hdr-name').textContent=currentUser.name;
+  document.getElementById('hdr-ward').textContent=currentUser.ward;
+  document.getElementById('avatar').textContent=currentUser.avatar;
+  var isAdmin=currentUser.role!=='citizen';
+  document.getElementById('banner-report-btn').style.display=isAdmin?'none':'block';
+  document.getElementById('issues-report-btn').style.display=isAdmin?'none':'inline-block';
+  // Show GP selector only for gram pradhan
+  var gpPanel = document.getElementById('gp-selector-panel');
+  var wardPanel = document.getElementById('ward-selector-panel');
+  if(currentUser.role==='gram_pradhan'){
+    gpPanel.style.display='block';
+    wardPanel.style.display='none';
+    selectedGP = null;
+    document.getElementById('gp-dropdown').value='';
+    document.getElementById('gp-info-bar').style.display='none';
+    document.getElementById('gp-selected-label').style.display='none';
+    renderGPSelector();
+  } else if(currentUser.role==='ward_officer'){
+    wardPanel.style.display='block';
+    gpPanel.style.display='none';
+    document.getElementById('ward-dropdown').value='';
+    document.getElementById('ward-info-bar').style.display='none';
+  } else {
+    gpPanel.style.display='none';
+    wardPanel.style.display='none';
+    selectedGP = null;
+  }
+  setLang(currentLang);
+  renderDashboard(); renderIssues(); renderSchemes(); renderMeetings();
+  showTab('dashboard');
+}
+
+function logout(){
+  currentUser=null;
+  document.getElementById('login-page').style.display='flex';
+  document.getElementById('app').style.display='none';
+  document.getElementById('chat-fab').style.display='none';
+  document.getElementById('chat-box').classList.remove('open');
+  chatOpen=false;
+}
+
+function updateWelcome(){
+  var t=T[currentLang];
+  var isAdmin=currentUser&&currentUser.role!=='citizen';
+  var name=currentUser?currentUser.name.split(' ')[0]:'';
+  set('welcome-name', t.welcomeGreet+', '+name+'! 🙏');
+  var subText = currentUser.ward+' • '+(isAdmin?t.adminPanel:t.citizenPortal);
+  if(currentUser.role==='gram_pradhan'){
+    if(selectedGP){
+      var gpName = currentLang==='hi'?selectedGP.nameHi:currentLang==='te'?selectedGP.nameTe:selectedGP.name;
+      subText = gpName+' • '+t.adminPanel+' • '+selectedGP.villages;
+    } else {
+      subText = 'Sirpur Kagaznagar Municipality • '+t.adminPanel+' • Select a GP above';
+    }
+  }
+  set('welcome-sub', subText);
+  set('tab-issues', isAdmin?t.tabIssues:t.tabIssuesCit);
+  set('issues-page-title', isAdmin?t.issuesPageTitle:t.issuesPageTitleCit);
+  set('banner-report-btn', t.reportIssue);
+}
+
+// ══════════════════════════════════════════════════════════
+//  TABS
+// ══════════════════════════════════════════════════════════
+function showTab(id){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('page-'+id).classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+}
+
+// ══════════════════════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════════════════════
+function showToast(msg,color){
+  color=color||'#2D6A4F';
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.style.background=color; t.style.display='block';
+  setTimeout(function(){t.style.display='none';},3000);
+}
+
+// ══════════════════════════════════════════════════════════
+//  RENDER DASHBOARD
+// ══════════════════════════════════════════════════════════
+function renderDashboard(){
+  if(!currentUser)return;
+  updateWelcome();
+  var t=T[currentLang];
+  // If gram pradhan with selected GP, show GP-specific stats
+  var displayIssues = issues;
+  if(currentUser.role==='gram_pradhan' && selectedGP){
+    displayIssues = issues.filter(function(i){ return i.level==='gram'; });
+  }
+  document.getElementById('s-total').textContent=displayIssues.length;
+  document.getElementById('s-open').textContent=displayIssues.filter(function(i){return i.status==='Open';}).length;
+  document.getElementById('s-prog').textContent=displayIssues.filter(function(i){return i.status==='In Progress';}).length;
+  document.getElementById('s-res').textContent=displayIssues.filter(function(i){return i.status==='Resolved';}).length;
+  var ri=document.getElementById('recent-issues');
+  ri.innerHTML=''; issues.slice(0,3).forEach(function(iss){ri.innerHTML+=buildIssueCard(iss);});
+  var qa=document.getElementById('quick-actions');
+  qa.innerHTML='';
+  if(currentUser.role==='citizen'){
+    [[t.qaWater,'🚰'],[t.qaLight,'💡'],[t.qaRoad,'🛣️'],[t.qaCert,'📄']].forEach(function(a){
+      qa.innerHTML+='<button class="quick-btn" onclick="openModal()"><span class="qicon">'+a[1]+'</span><span class="qlabel">'+a[0]+'</span></button>';
+    });
+  } else {
+    [[t.qaViewIssues,'📊','issues'],[t.qaSchemes,'📜','schemes'],[t.qaMeetings,'🤝','meetings']].forEach(function(a){
+      qa.innerHTML+='<button class="quick-btn" onclick="showTab(\''+a[2]+'\')"><span class="qicon">'+a[1]+'</span><span class="qlabel">'+a[0]+'</span></button>';
+    });
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+//  BUILD ISSUE CARD
+// ══════════════════════════════════════════════════════════
+function buildIssueCard(iss){
+  var t=T[currentLang];
+  var isAdmin=currentUser&&currentUser.role!=='citizen';
+  var bodyHtml='';
+  if(iss.expanded){
+    var comments='';
+    if(iss.comments.length>0){
+      var chtml='';
+      iss.comments.forEach(function(c){
+        chtml+='<div style="margin-bottom:6px"><div class="update-author">'+c.author+' <span class="update-date">• '+c.date+'</span></div><div class="update-text">'+c.text+'</div></div>';
+      });
+      comments='<div class="updates-box"><div class="updates-title">'+t.updates+'</div>'+chtml+'</div>';
+    }
+    var adminBtns='';
+    if(isAdmin){
+      var sbLabels=t.statusBtns||['Open','In Progress','Under Review','Resolved'];
+      var sbVals=t.statusBtnVals||sbLabels;
+      var btns='';
+      sbLabels.forEach(function(s,i){
+        var val=sbVals[i]||s;
+        var active=iss.status===val;
+        btns+='<button class="status-btn" style="background:'+(active?'#1B2A4A':'#F1F5F9')+';color:'+(active?'#fff':'#334155')+'" onclick="updateStatus(\''+iss.id+'\',\''+val+'\')">'+s+'</button>';
+      });
+      adminBtns='<div class="status-btns">'+btns+'</div>';
+    }
+    bodyHtml='<div class="issue-body"><div class="issue-desc">'+iss.description+'</div>'+(iss.assignedTo?'<div class="issue-assigned">'+t.assignedTo+' '+iss.assignedTo+'</div>':'')+comments+adminBtns+'</div>';
+  }
+  return '<div class="issue-card" id="card-'+iss.id+'">'+
+    '<div class="issue-header" onclick="toggleIssue(\''+iss.id+'\')">'+
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">'+
+        '<div style="flex:1">'+
+          '<div class="issue-badges">'+badge(iss.status)+badge(iss.priority)+badge(iss.level)+'</div>'+
+          '<div class="issue-title">'+iss.title+'</div>'+
+          '<div class="issue-meta">📍 '+iss.location+' • 📅 '+iss.date+' • '+iss.id+'</div>'+
+        '</div>'+
+        '<div class="issue-votes"><div class="vnum">'+iss.upvotes+'</div><div class="vlabel">'+t.votes+'</div></div>'+
+      '</div>'+
+    '</div>'+bodyHtml+'</div>';
+}
+
+function toggleIssue(id){
+  var iss=issues.find(function(i){return i.id===id;});
+  if(iss){iss.expanded=!iss.expanded; renderIssues(); renderDashboard();}
+}
+
+function updateStatus(id,status){
+  var iss=issues.find(function(i){return i.id===id;});
+  if(iss){iss.status=status; renderIssues(); renderDashboard(); showToast(T[currentLang].issueUpdated+status);}
+}
+
+// ══════════════════════════════════════════════════════════
+//  RENDER ISSUES
+// ══════════════════════════════════════════════════════════
+function renderIssues(){
+  if(!currentUser)return;
+  var fs=document.getElementById('filter-status');
+  var fl=document.getElementById('filter-level');
+  var fsv=fs?fs.value:'All';
+  var flv=fl?fl.value:'All';
+  var filtered=issues.filter(function(i){
+    if(fsv!=='All'&&i.status!==fsv)return false;
+    if(flv!=='All'&&i.level!==flv)return false;
+    return true;
+  });
+  document.getElementById('issues-count').textContent=filtered.length+T[currentLang].issuesFound;
+  var html=''; filtered.forEach(function(iss){html+=buildIssueCard(iss);});
+  document.getElementById('all-issues').innerHTML=html;
+}
+
+// ══════════════════════════════════════════════════════════
+//  RENDER SCHEMES
+// ══════════════════════════════════════════════════════════
+function renderSchemes(){
+  var t=T[currentLang];
+  var html='';
+  SCHEMES.forEach(function(s){
+    html+='<div class="scheme-card">'+
+      '<div class="scheme-header"><div class="scheme-name">'+s.name+'</div>'+badge(s.category)+'</div>'+
+      '<div class="scheme-body">'+
+        '<div class="scheme-row"><span class="scheme-key">'+t.benefit+'</span><span class="scheme-val" style="color:#2D6A4F;font-weight:700">'+s.benefit+'</span></div>'+
+        '<div class="scheme-row"><span class="scheme-key">'+t.eligible+'</span><span class="scheme-val">'+s.eligibility+'</span></div>'+
+        '<div class="scheme-row"><span class="scheme-key">'+t.deadline+'</span><span class="scheme-val" style="color:#FF6B35;font-weight:700">'+s.deadline+'</span></div>'+
+        '<div class="scheme-row"><span class="scheme-key">'+t.applied+'</span><span class="scheme-val">'+s.applied+' applicants</span></div>'+
+        '<button class="apply-btn" onclick="showToast(\''+t.appInitiated+'\')">'+t.applyBtn+'</button>'+
+      '</div></div>';
+  });
+  document.getElementById('schemes-grid').innerHTML=html;
+}
+
+// ══════════════════════════════════════════════════════════
+//  RENDER MEETINGS
+// ══════════════════════════════════════════════════════════
+function renderMeetings(){
+  var t=T[currentLang];
+  var html='';
+  MEETINGS.forEach(function(m){
+    var agenda=''; m.agenda.forEach(function(a){agenda+='<div class="agenda-item">• '+a+'</div>';});
+    html+='<div class="meeting-card">'+
+      '<div class="meeting-top">'+
+        '<div>'+
+          '<div class="meeting-title">'+m.title+'</div>'+
+          '<div class="meeting-meta">📅 '+m.date+' • ⏰ '+m.time+'</div>'+
+          '<div class="meeting-meta">📍 '+m.venue+'</div>'+
+          '<div class="meeting-attendees">👥 '+m.attendees+' '+t.registered+'</div>'+
+        '</div>'+
+        '<button class="reg-btn" onclick="showToast(\''+t.regFor+m.title+'\')">'+t.registerBtn+'</button>'+
+      '</div>'+
+      '<div class="agenda-box"><div class="agenda-title">'+t.agenda+'</div>'+agenda+'</div>'+
+    '</div>';
+  });
+  document.getElementById('meetings-list').innerHTML=html;
+}
+
+// ══════════════════════════════════════════════════════════
+//  REPORT MODAL
+// ══════════════════════════════════════════════════════════
+function openModal(){
+  buildModalDropdowns();
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
+
+function submitIssue(){
+  var t=T[currentLang];
+  var title=document.getElementById('f-title').value.trim();
+  var location=document.getElementById('f-location').value.trim();
+  var desc=document.getElementById('f-desc').value.trim();
+  if(!title||!location||!desc){showToast(t.fillFields,'#E53E3E');return;}
+  var newId='ISS'+String(issues.length+1).padStart(3,'0');
+  issues.unshift({
+    id:newId,title:title,location:location,description:desc,
+    category:document.getElementById('f-category').value,
+    priority:document.getElementById('f-priority').value,
+    level:document.getElementById('f-level').value,
+    status:'Open',submittedBy:currentUser.name,
+    date:new Date().toISOString().slice(0,10),
+    upvotes:1,comments:[],assignedTo:null,expanded:false
+  });
+  document.getElementById('f-title').value='';
+  document.getElementById('f-location').value='';
+  document.getElementById('f-desc').value='';
+  closeModal();
+  renderDashboard(); renderIssues();
+  showToast(t.issueReported+newId);
+}
+
+// ══════════════════════════════════════════════════════════
+//  AI CHAT
+// ══════════════════════════════════════════════════════════
+function toggleChat(){
+  chatOpen=!chatOpen;
+  var box=document.getElementById('chat-box');
+  if(chatOpen){
+    if(chatMessages.length===0) chatMessages=[{role:'ai',text:T[currentLang].chatWelcome}];
+    box.classList.add('open');
+    renderChatMessages();
+    buildChatQuickBtns();
+    document.getElementById('chat-fab').textContent='✕';
+  } else {
+    box.classList.remove('open');
+    document.getElementById('chat-fab').textContent='🤖';
+  }
+}
+
+function renderChatMessages(){
+  var html='';
+  chatMessages.forEach(function(m){
+    html+='<div class="msg '+m.role+'">'+m.text.replace(/</g,'&lt;')+'</div>';
+  });
+  var el=document.getElementById('chat-messages');
+  el.innerHTML=html;
+  el.scrollTop=el.scrollHeight;
+}
+
+function quickChat(text){document.getElementById('chat-input').value=text; sendChat();}
+
+function getFallback(msg){
+  var l=msg.toLowerCase();
+  var t=T[currentLang];
+  if(l.includes('complaint')||l.includes('issue')||l.includes('shikayat')||l.includes('firyad')||l.includes('సమస్య')||l.includes('ఫిర్యాదు')||l.includes('शिकायत'))
+    return 'To file a complaint:\n1. Click "'+t.reportIssue+'" button\n2. Select category\n3. Describe the problem\n4. Submit — you\'ll get a tracking ID\n\nYour complaint reaches the officer directly!';
+  if(l.includes('scheme')||l.includes('yojana')||l.includes('awas')||l.includes('పథకం')||l.includes('योजना'))
+    return 'For PM Awas Yojana:\nDocuments needed:\n• Aadhaar card\n• Income certificate (below ₹1.8 lakh)\n• Land ownership proof\n• Bank account details\n• Ration card\n\nApply at nearest GP or Municipal office. Application is FREE!';
+  if(l.includes('certificate')||l.includes('birth')||l.includes('document')||l.includes('సర్టిఫికెట్')||l.includes('प्रमाणपत्र'))
+    return 'For Birth Certificate:\nRequired documents:\n• Hospital discharge slip\n• Parent\'s Aadhaar cards\n• Marriage certificate\n\nTimeline: 7-15 working days\nFee: ₹10 only\n\nApply at eGramSwaraj portal or ward office.';
+  if(l.includes('water')||l.includes('pipeline')||l.includes('నీరు')||l.includes('पानी'))
+    return 'For water supply complaints:\n1. File complaint with your address\n2. Mention duration of disruption\n\nEmergency: Call 1916\n\nIf unresolved in 48 hours, escalate to Commissioner.';
+  return 'I can help with complaints, government schemes, certificates, and local governance. Please be more specific!';
+}
+
+async function sendChat(){
+  var t=T[currentLang];
+  var input=document.getElementById('chat-input');
+  var msg=input.value.trim();
+  if(!msg)return;
+  input.value='';
+  chatMessages.push({role:'user',text:msg});
+  chatMessages.push({role:'ai',text:t.chatThinking});
+  renderChatMessages();
+  var reply=getFallback(msg);
+  try{
+    var langInstruction = currentLang==='hi'?'Respond in Hindi (हिंदी).':currentLang==='te'?'Respond in Telugu (తెలుగు).':'Respond in English.';
+    var res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:400,
+        system:'You are Jan Sahayak, an AI assistant for Indian local governance (Gram Panchayat and Municipality). '+langInstruction+' Help citizens with complaints, government schemes, certificates, water, roads, meetings. Keep responses under 120 words. Use bullet points. Be warm and empathetic.',
+        messages:[{role:'user',content:msg}]
+      })
+    });
+    if(res.ok){var d=await res.json();reply=d.content&&d.content[0]?d.content[0].text:reply;}
+  }catch(e){}
+  chatMessages[chatMessages.length-1]={role:'ai',text:reply};
+  renderChatMessages();
+}
+
+// ══════════════════════════════════════════════════════════
+//  AGRICULTURE DATA & FUNCTIONS
+// ══════════════════════════════════════════════════════════
+var MANDI_PRICES = [
+  {emoji:'🌿',name:'Cotton',nameHi:'कपास',nameTe:'పత్తి',     price:6800, change:+120, unit:'per quintal'},
+  {emoji:'🟡',name:'Soybean',nameHi:'सोयाबीन',nameTe:'సోయాబీన్', price:4200, change:-80,  unit:'per quintal'},
+  {emoji:'🌾',name:'Rice',nameHi:'धान',nameTe:'వరి',           price:2183, change:+45,  unit:'per quintal'},
+  {emoji:'🌽',name:'Maize',nameHi:'मक्का',nameTe:'మొక్కజొన్న',  price:2050, change:+30,  unit:'per quintal'},
+  {emoji:'🌶️',name:'Chilli',nameHi:'मिर्च',nameTe:'మిర్చి',    price:12000,change:+500, unit:'per quintal'},
+  {emoji:'💛',name:'Turmeric',nameHi:'हल्दी',nameTe:'పసుపు',   price:14500,change:-200, unit:'per quintal'},
+  {emoji:'🟤',name:'Toor Dal',nameHi:'तुअर दाल',nameTe:'కంది',  price:7200, change:+150, unit:'per quintal'},
+  {emoji:'🌾',name:'Wheat',nameHi:'गेहूं',nameTe:'గోధుమ',      price:2275, change:0,    unit:'per quintal'},
+];
+
+var FARMER_SCHEMES = [
+  {name:'PM Kisan Samman Nidhi',    category:'Cash Support',  eligibility:'Small & marginal farmers (<2 hectares)',deadline:'Ongoing',  applied:3421,benefit:'₹6,000/year (3 installments)',farmer:true},
+  {name:'Rythu Bandhu (Telangana)', category:'Investment',    eligibility:'All farmers with land records',         deadline:'Ongoing',  applied:2890,benefit:'₹10,000/acre per year',farmer:true},
+  {name:'PM Fasal Bima Yojana',     category:'Crop Insurance',eligibility:'All farmers growing notified crops',    deadline:'Seasonal', applied:1203,benefit:'Up to ₹2 lakh crop loss coverage',farmer:true},
+  {name:'Rythu Bima (Telangana)',   category:'Life Insurance',eligibility:'Farmers aged 18-59 with Pattadar Passbook',deadline:'Ongoing',applied:980,benefit:'₹5 lakh on accidental death',farmer:true},
+  {name:'Kisan Credit Card (KCC)',  category:'Credit',        eligibility:'All farmers, tenant farmers, SHGs',     deadline:'Ongoing',  applied:756, benefit:'Upto ₹3 lakh @ 4% interest',farmer:true},
+  {name:'Drip Irrigation Subsidy',  category:'Infrastructure',eligibility:'All farmers, SC/ST get higher subsidy', deadline:'2026-09-30',applied:445,benefit:'55-90% subsidy on drip/sprinkler',farmer:true},
+];
+
+var LABOUR_BOARD = [
+  {id:'LB001',type:'Harvesting',location:'Sirpur Village, Ward 3',date:'2026-03-10',count:'5-8',wage:'450',phone:'9876543210',postedBy:'Ramanna Goud',   daysAgo:1},
+  {id:'LB002',type:'Cotton Picking',location:'Kagaznagar GP Area', date:'2026-03-12',count:'10+',wage:'400',phone:'9988776655',postedBy:'Laxmi Devi',    daysAgo:2},
+  {id:'LB003',type:'Sowing',        location:'Sirpur Outskirts',    date:'2026-03-15',count:'3-5',wage:'500',phone:'9123456789',postedBy:'Venkat Reddy',  daysAgo:3},
+];
+
+var MGNREGA_DATA = [
+  {name:'Ramesh Patil',  jobCard:'TG/KGZ/001234',daysWorked:68,daysAllowed:100,wagesDue:0,    lastWork:'2026-02-20',status:'Active'},
+  {name:'Savita Bai',    jobCard:'TG/KGZ/001891',daysWorked:42,daysAllowed:100,wagesDue:3200, lastWork:'2026-02-15',status:'Pending Wages'},
+];
+
+var WAGE_RATES = [
+  {work:'Agricultural Labour (General)',rate:'₹ 285/day'},
+  {work:'Agricultural Labour (Skilled)',rate:'₹ 340/day'},
+  {work:'MGNREGA Work',                 rate:'₹ 257/day'},
+  {work:'Cotton Picking',               rate:'₹ 8-12/kg'},
+  {work:'Harvesting (per acre)',        rate:'₹ 1200-1800'},
+];
+
+// Agri sub-tab switching
+function showAgriTab(id){
+  document.querySelectorAll('.agri-tab').forEach(function(b){b.classList.remove('active');});
+  document.querySelectorAll('.agri-section').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('atab-'+id).classList.add('active');
+  document.getElementById('asec-'+id).classList.add('active');
+}
+
+// Render Mandi Prices
+function renderMandi(){
+  var html='';
+  MANDI_PRICES.forEach(function(m){
+    var trendHtml = m.change>0
+      ? '<div class="mandi-trend trend-up">▲ ₹'+m.change+'</div>'
+      : m.change<0
+        ? '<div class="mandi-trend trend-down">▼ ₹'+Math.abs(m.change)+'</div>'
+        : '<div class="mandi-trend" style="color:#64748B">— Stable</div>';
+    html+='<div class="mandi-card">'+
+      '<div class="mandi-crop">'+m.emoji+'</div>'+
+      '<div class="mandi-name">'+m.name+'</div>'+
+      '<div style="font-size:10px;color:#64748B;margin-bottom:4px;">'+m.nameHi+' • '+m.nameTe+'</div>'+
+      '<div class="mandi-price">₹'+m.price.toLocaleString()+'</div>'+
+      '<div class="mandi-unit">'+m.unit+'</div>'+
+      trendHtml+
+    '</div>';
+  });
+  var el=document.getElementById('mandi-prices-grid');
+  if(el) el.innerHTML=html;
+}
+
+// Render Farmer Schemes
+function renderFarmerSchemes(){
+  var html='';
+  FARMER_SCHEMES.forEach(function(s){
+    html+='<div class="scheme-card">'+
+      '<div class="scheme-header">'+
+        '<div class="scheme-name">'+s.name+' <span class="scheme-farmer-badge">🌾 Farmer</span></div>'+
+        '<span class="badge" style="background:#D8F3DC;color:#166534">'+s.category+'</span>'+
+      '</div>'+
+      '<div class="scheme-body">'+
+        '<div class="scheme-row"><span class="scheme-key">Benefit</span><span class="scheme-val" style="color:#2D6A4F;font-weight:700">'+s.benefit+'</span></div>'+
+        '<div class="scheme-row"><span class="scheme-key">Eligible</span><span class="scheme-val">'+s.eligibility+'</span></div>'+
+        '<div class="scheme-row"><span class="scheme-key">Deadline</span><span class="scheme-val" style="color:#FF6B35;font-weight:700">'+s.deadline+'</span></div>'+
+        '<div class="scheme-row"><span class="scheme-key">Applied</span><span class="scheme-val">'+s.applied+' farmers</span></div>'+
+        '<button class="apply-btn" onclick="showToast(\'Application for '+s.name+' initiated!\')">Apply Now / దరఖాస్తు చేయండి</button>'+
+      '</div></div>';
+  });
+  var el=document.getElementById('farmer-schemes-grid');
+  if(el) el.innerHTML=html;
+}
+
+// Render Labour Board
+function renderLabourBoard(){
+  var html='';
+  LABOUR_BOARD.forEach(function(l){
+    html+='<div class="labour-card">'+
+      '<div class="labour-card-header">'+
+        '<div>'+
+          '<div class="labour-title">'+l.type+'</div>'+
+          '<div class="labour-meta">📍 '+l.location+' • '+l.daysAgo+' day(s) ago</div>'+
+        '</div>'+
+        '<span class="labour-badge">'+l.count+' workers</span>'+
+      '</div>'+
+      '<div class="labour-details">'+
+        '<span class="labour-detail">📅 '+l.date+'</span>'+
+        '<span class="labour-detail">💰 ₹'+l.wage+'/day</span>'+
+        '<span class="labour-detail">👤 '+l.postedBy+'</span>'+
+      '</div>'+
+      '<button class="contact-btn" onclick="showToast(\'Connecting to '+l.postedBy+' — '+l.phone+'\')">📞 Contact Farmer</button>'+
+    '</div>';
+  });
+  var el=document.getElementById('labour-board-list');
+  if(el) el.innerHTML=html;
+}
+
+// Render MGNREGA
+function renderMgnrega(){
+  var html='';
+  MGNREGA_DATA.forEach(function(m){
+    var pct=Math.round((m.daysWorked/m.daysAllowed)*100);
+    html+='<div class="mgnrega-card">'+
+      '<div class="mgnrega-header">'+
+        '<div>'+
+          '<div class="mgnrega-title">'+m.name+'</div>'+
+          '<div style="font-size:11px;color:#64748B">Job Card: '+m.jobCard+'</div>'+
+          '<div style="font-size:11px;color:#64748B">Last Work: '+m.lastWork+'</div>'+
+        '</div>'+
+        '<div class="mgnrega-days"><div class="dnum">'+m.daysWorked+'/'+m.daysAllowed+'</div><div class="dlabel">DAYS WORKED</div></div>'+
+      '</div>'+
+      '<div style="background:#F1F5F9;border-radius:8px;height:8px;margin-bottom:10px;">'+
+        '<div style="background:linear-gradient(90deg,#2D6A4F,#52B788);height:8px;border-radius:8px;width:'+pct+'%"></div>'+
+      '</div>'+
+      (m.wagesDue>0
+        ? '<div style="background:#FEE2E2;border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;">'+
+            '<span style="color:#991B1B;font-weight:700;font-size:13px;">⚠️ Wages Pending: ₹'+m.wagesDue+'</span>'+
+            '<button style="background:#E53E3E;color:#fff;border:none;padding:6px 12px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;" onclick="showToast(\'Wage complaint filed! We will follow up.\')">File Complaint</button>'+
+          '</div>'
+        : '<div style="background:#D1FAE5;border-radius:8px;padding:8px 12px;color:#065F46;font-weight:700;font-size:12px;">✅ All wages paid — Status: '+m.status+'</div>'
+      )+
+    '</div>';
+  });
+  var el=document.getElementById('mgnrega-cards');
+  if(el) el.innerHTML=html;
+
+  // Wage table
+  var whtml='';
+  WAGE_RATES.forEach(function(w){
+    whtml+='<div class="wage-row"><span style="color:#334155">'+w.work+'</span><span style="font-weight:700;color:#2D6A4F">'+w.rate+'</span></div>';
+  });
+  var wel=document.getElementById('wage-table');
+  if(wel) wel.innerHTML=whtml;
+}
+
+// AI Crop Advice
+async function getCropAdvice(){
+  var crop   = document.getElementById('agri-crop').value;
+  var soil   = document.getElementById('agri-soil').value;
+  var land   = document.getElementById('agri-land').value;
+  var season = document.getElementById('agri-season').value;
+  var water  = document.getElementById('agri-water').value;
+  var problem= document.getElementById('agri-problem').value;
+  var resEl  = document.getElementById('agri-advice-result');
+  var txtEl  = document.getElementById('agri-advice-text');
+  var btn    = document.getElementById('agri-advice-btn');
+  resEl.classList.add('show');
+  txtEl.textContent = 'Getting AI advice… please wait ⏳';
+  btn.disabled=true; btn.textContent='Loading…';
+
+  var prompt = 'Farmer details: Crop: '+crop+', Soil: '+soil+', Land: '+land+', Season: '+season+', Water: '+water+(problem?', Problem: '+problem:'')+'. Location: Sirpur Kagaznagar, Telangana.\n\nGive practical farming advice covering: 1) Fertilizer recommendation with quantities 2) Irrigation schedule 3) Pest/disease prevention 4) Expected yield 5) Best selling time. Keep it simple, practical, under 200 words.';
+  var langNote = currentLang==='hi'?'Respond in Hindi.':currentLang==='te'?'Respond in Telugu.':'Respond in English.';
+
+  var reply = '🌱 Recommendations for '+crop+' ('+soil+'):\n\n• Fertilizer: Apply DAP 50kg/acre at sowing. Urea 25kg/acre at 30 days.\n• Irrigation: Water every 10-12 days. Avoid waterlogging.\n• Pest Control: Spray neem-based pesticide at first sign of infestation.\n• Harvest: Expected in 90-120 days for this season.\n• Selling: Check Sirpur APMC mandi prices 2 weeks before harvest.\n\nFor more help, contact your local Krishi Vigyan Kendra (KVK).';
+
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',max_tokens:500,
+        system:'You are a senior agricultural expert specializing in Telangana farming. '+langNote+' Give practical, specific advice for small farmers. Use bullet points. Be concise and actionable.',
+        messages:[{role:'user',content:prompt}]
+      })
+    });
+    if(res.ok){var d=await res.json();reply=d.content&&d.content[0]?d.content[0].text:reply;}
+  }catch(e){}
+
+  txtEl.textContent=reply;
+  btn.disabled=false;
+  btn.textContent='🤖 Get AI Advice — सलाह लें — సలహా తీసుకోండి';
+}
+
+// Labour Modal
+function openLabourModal(){
+  document.getElementById('labour-modal-overlay').style.display='flex';
+  // set today's date
+  document.getElementById('lb-date').value=new Date().toISOString().slice(0,10);
+}
+function closeLabourModal(){ document.getElementById('labour-modal-overlay').style.display='none'; }
+function submitLabour(){
+  var type=document.getElementById('lb-type').value;
+  var loc=document.getElementById('lb-loc').value.trim();
+  var phone=document.getElementById('lb-phone').value.trim();
+  if(!loc||!phone){showToast('Please fill location and phone number','#E53E3E');return;}
+  LABOUR_BOARD.unshift({
+    id:'LB'+String(LABOUR_BOARD.length+1).padStart(3,'0'),
+    type:type.split('—')[0].trim(), location:loc,
+    date:document.getElementById('lb-date').value,
+    count:document.getElementById('lb-count').value,
+    wage:document.getElementById('lb-wage').value||'Negotiable',
+    phone:phone, postedBy:currentUser.name, daysAgo:0
+  });
+  closeLabourModal();
+  renderLabourBoard();
+  showAgriTab('labour');
+  showToast('✅ Labour requirement posted!');
+}
+
+// Update setLang to include agri tab
+var _origSetLang = setLang;
+setLang = function(lang){
+  _origSetLang(lang);
+  var t=T[lang];
+  if(t.tabAgri) set('tab-agri', t.tabAgri);
+  // re-render agri pages if loaded
+  renderMandi(); renderFarmerSchemes(); renderLabourBoard(); renderMgnrega();
+  // re-render GP selector if gram pradhan
+  if(currentUser && currentUser.role==='gram_pradhan') renderGPSelector();
+};
+
+// Init agri data on page load
+buildFilterDropdowns();
+buildModalDropdowns();
+buildChatQuickBtns();
+renderMandi(); renderFarmerSchemes(); renderLabourBoard(); renderMgnrega();
+</script>
+</body>
+</html>
